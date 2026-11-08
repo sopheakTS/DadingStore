@@ -29,10 +29,17 @@
                 </div>
             </div>
             
-            <!-- Search Bar -->
-            <div class="relative w-full md:w-80">
-                <input type="text" id="searchInput" placeholder="ស្វែងរកឈ្មោះទំនិញ ឬកូដ..." class="w-full px-4 py-2.5 pl-10 rounded-xl bg-slate-700/60 border border-slate-600 text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 transition">
-                <svg class="w-5 h-5 text-slate-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            <!-- Search Bar & Telegram Contact Button -->
+            <div class="flex items-center gap-2.5 w-full md:w-auto">
+                <div class="relative w-full md:w-72">
+                    <input type="text" id="searchInput" placeholder="ស្វែងរកឈ្មោះទំនិញ ឬកូដ..." class="w-full px-4 py-2.5 pl-10 rounded-xl bg-slate-700/60 border border-slate-600 text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 transition">
+                    <svg class="w-5 h-5 text-slate-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+                <!-- Telegram Contact Button -->
+                <a href="https://t.me/Sopheak1688" target="_blank" rel="noopener noreferrer" class="bg-sky-500 hover:bg-sky-600 text-white px-3.5 py-2.5 rounded-xl font-medium text-sm flex items-center gap-2 shadow-md transition shrink-0" title="ទំនាក់ទំនង Telegram">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.622-.168.9-.5 1.201-.82 1.23-.697.064-1.228-.461-1.901-.903-1.056-.693-1.653-1.124-2.678-1.8-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.329-.913.489-1.302.481-.428-.009-1.252-.242-1.865-.442-752-.245-1.349-.375-1.297-.789.027-.216.324-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.14.12.098.153.228.166.331.011.095.024.312.011.482z"/></svg>
+                    <span class="hidden sm:inline">ទំនាក់ទំនង</span>
+                </a>
             </div>
         </div>
 
@@ -69,10 +76,19 @@
 
     <!-- Image Lightbox Modal for Zooming -->
     <div id="imageModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex justify-center items-center p-4" onclick="closeModal()">
-        <div class="relative max-w-4xl max-h-[90vh] bg-white rounded-2xl overflow-hidden p-2 shadow-2xl" onclick="event.stopPropagation()">
-            <button onclick="closeModal()" class="absolute top-4 right-4 bg-slate-900/70 hover:bg-slate-900 text-white w-9 h-9 rounded-full flex items-center justify-center font-bold text-lg transition z-10">✕</button>
-            <img id="modalImg" src="" alt="Zoomed Product Image" class="max-h-[80vh] max-w-full object-contain mx-auto rounded-xl">
-            <div id="modalTitle" class="text-center font-bold text-slate-800 text-sm py-2 px-4"></div>
+        <div class="relative max-w-4xl w-full max-h-[90vh] bg-white rounded-2xl overflow-hidden p-3 md:p-4 shadow-2xl flex flex-col items-center" onclick="event.stopPropagation()">
+            <button onclick="closeModal()" class="absolute top-3 right-3 bg-slate-900/70 hover:bg-slate-900 text-white w-9 h-9 rounded-full flex items-center justify-center font-bold text-lg transition z-10">✕</button>
+            <div class="w-full overflow-y-auto max-h-[75vh] flex flex-col items-center">
+                <img id="modalImg" src="" alt="Zoomed Product Image" class="max-h-[65vh] max-w-full object-contain mx-auto rounded-xl">
+                <div id="modalTitle" class="text-center font-bold text-slate-900 text-sm md:text-base py-2 px-4 mt-2"></div>
+            </div>
+            <!-- Download Button -->
+            <div class="w-full pt-3 mt-2 border-t border-slate-100 flex justify-center">
+                <button id="downloadBtn" class="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-5 py-2.5 rounded-xl shadow transition flex items-center gap-2 text-sm">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    ទាញយកទុករូបភាព (Save Image)
+                </button>
+            </div>
         </div>
     </div>
 
@@ -89,6 +105,7 @@
 
         let products = [];
         let currentCategory = 'all';
+        let currentModalData = { imgSrc: '', title: '', code: '', variant: '' };
         const grid = document.getElementById('productGrid');
         const searchInput = document.getElementById('searchInput');
         const noResult = document.getElementById('noResult');
@@ -98,6 +115,7 @@
         const imageModal = document.getElementById('imageModal');
         const modalImg = document.getElementById('modalImg');
         const modalTitle = document.getElementById('modalTitle');
+        const downloadBtn = document.getElementById('downloadBtn');
 
         function parseCSV(text) {
             const lines = text.split('\n');
@@ -193,9 +211,10 @@
             filterData();
         }
 
-        function openModal(imgSrc, title) {
+        function openModal(imgSrc, name, code, variant) {
+            currentModalData = { imgSrc, name, code, variant };
             modalImg.src = imgSrc;
-            modalTitle.textContent = title;
+            modalTitle.innerHTML = `${code ? `<span class='text-amber-600 font-mono'>[${code}]</span> ` : ''}${name} ${variant ? `<span class='text-slate-500'>(${variant})</span>` : ''}`;
             imageModal.classList.remove('hidden');
         }
 
@@ -203,6 +222,100 @@
             imageModal.classList.add('hidden');
             modalImg.src = '';
         }
+
+        // Helper function to draw image with text overlay onto canvas for downloading
+        async function downloadImageWithInfo() {
+            if (!currentModalData.imgSrc) return;
+
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.src = currentModalData.imgSrc;
+
+            // Show loading state on button
+            const originalText = downloadBtn.innerHTML;
+            downloadBtn.innerHTML = '⏳ កំពុងរៀបចំរូបភាព...';
+            downloadBtn.disabled = true;
+
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                const padding = 40;
+                const headerHeight = 100;
+                canvas.width = img.width + (padding * 2);
+                canvas.height = img.height + headerHeight + (padding * 2);
+
+                // Background
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Draw Header background card
+                ctx.fillStyle = '#f8fafc';
+                ctx.roundRect ? ctx.roundRect(20, 20, canvas.width - 40, headerHeight, 16) : ctx.fillRect(20, 20, canvas.width - 40, headerHeight);
+                ctx.fillStyle = '#e2e8f0';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(20, 20, canvas.width - 40, headerHeight);
+
+                // Draw Code & Variant badges on canvas
+                ctx.font = 'bold 28px "Kantumruy Pro", sans-serif';
+                ctx.fillStyle = '#b45309';
+                ctx.fillText(`កូដ: ${currentModalData.code || 'N/A'}`, 50, 80);
+
+                ctx.fillStyle = '#475569';
+                ctx.fillText(`ទំហំ: ${currentModalData.variant || 'Standard'}`, canvas.width - 350, 80);
+
+                // Draw Product Image
+                ctx.drawImage(img, padding, headerHeight + padding, img.width, img.height);
+
+                // Draw Product Name at the bottom
+                ctx.fillStyle = '#0f172a';
+                ctx.font = 'bold 32px "Kantumruy Pro", sans-serif';
+                
+                // Wrap text if too long
+                const text = currentModalData.name;
+                const maxWidth = canvas.width - 80;
+                let words = text.split(' ');
+                let line = '';
+                let y = headerHeight + padding + img.height + 50;
+
+                for(let n = 0; n < words.length; n++) {
+                    let testLine = line + words[n] + ' ';
+                    let metrics = ctx.measureText(testLine);
+                    let testWidth = metrics.width;
+                    if (testWidth > maxWidth && n > 0) {
+                        ctx.fillText(line, padding, y);
+                        line = words[n] + ' ';
+                        y += 40;
+                    } else {
+                        line = testLine;
+                    }
+                }
+                ctx.fillText(line, padding, y);
+
+                // Trigger download
+                const link = document.createElement('a');
+                link.download = `${currentModalData.code || 'product'}_${currentModalData.name.substring(0, 20)}.jpg`;
+                link.href = canvas.toDataURL('image/jpeg', 0.95);
+                link.click();
+
+                downloadBtn.innerHTML = originalText;
+                downloadBtn.disabled = false;
+            };
+
+            img.onerror = function() {
+                // Fallback: direct download link if CORS fails
+                const link = document.createElement('a');
+                link.href = currentModalData.imgSrc;
+                link.target = '_blank';
+                link.download = 'product.jpg';
+                link.click();
+                
+                downloadBtn.innerHTML = originalText;
+                downloadBtn.disabled = false;
+            };
+        }
+
+        downloadBtn.addEventListener('click', downloadImageWithInfo);
 
         function renderProducts(items) {
             if (!grid) return;
@@ -223,8 +336,12 @@
                 
                 // Image handling with click-to-zoom support and upper-right product code badge with ~50% background opacity
                 const imgSrc = p.linkphoto || 'https://placehold.co/300x200/f1f5f9/94a3b8?text=No+Image';
+                const safeName = p.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                const safeCode = p.code.replace(/'/g, "\\'");
+                const safeVariant = p.variant.replace(/'/g, "\\'");
+
                 const imgHtml = `
-                    <div class="w-full h-32 sm:h-40 md:h-44 bg-slate-100 rounded-lg overflow-hidden mb-2.5 md:mb-3 border border-slate-100 relative cursor-pointer group" onclick="openModal('${imgSrc}', '${p.name.replace(/'/g, "\\'")}')">
+                    <div class="w-full h-32 sm:h-40 md:h-44 bg-slate-100 rounded-lg overflow-hidden mb-2.5 md:mb-3 border border-slate-100 relative cursor-pointer group" onclick="openModal('${imgSrc}', '${safeName}', '${safeCode}', '${safeVariant}')">
                         <img src="${imgSrc}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.onerror=null; this.src='https://placehold.co/300x200/f1f5f9/94a3b8?text=No+Image';">
                         
                         <!-- Product Code positioned at the upper right with 50% background opacity -->
