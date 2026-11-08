@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bestir, Corolla & DaDing Product Catalog 2026</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Kantumruy Pro', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Header / Hero Section (Modernized Style) -->
+    <header class="bg-gradient-to-r from-slate-900 via-slate-800 to-amber-600 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-5 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="p-3 bg-amber-500 rounded-xl text-slate-900 font-bold text-xl shadow">
+                    🛠️
+                </div>
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight">ឃ្លាំងលក់ឧបករណ៍ជាង និងសម្ភារៈ</h1>
+                    <p class="text-xs md:text-sm text-amber-300 font-medium mt-0.5">តារាងតម្លៃផ្លូវការ 2026 - BESTIR | COROLLA | DADING</p>
+                </div>
+            </div>
+            
+            <!-- Search Bar -->
+            <div class="relative w-full md:w-80">
+                <input type="text" id="searchInput" placeholder="ស្វែងរកឈ្មោះទំនិញ ឬកូដ..." class="w-full px-4 py-2.5 pl-10 rounded-xl bg-slate-700/60 border border-slate-600 text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 transition">
+                <svg class="w-5 h-5 text-slate-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+        </div>
+
+        <!-- Brand Navigation Tabs -->
+        <div class="bg-slate-900/80 backdrop-blur border-t border-slate-700/50">
+            <div class="max-w-7xl mx-auto px-4 flex overflow-x-auto gap-2 py-2.5 no-scrollbar" id="categoryTabs">
+                <button onclick="setCategory('all')" class="cat-tab px-4 py-1.5 rounded-lg text-sm font-semibold transition bg-amber-500 text-slate-900 shadow" data-cat="all">ទាំងអស់ (All)</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Status & Result Count Info -->
+        <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+            <div id="resultCount" class="text-sm font-semibold text-slate-700">កំពុងទាញយកទិន្នន័យ...</div>
+            <div id="syncStatus" class="text-xs px-3 py-1 bg-amber-100 text-amber-800 font-semibold rounded-full flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span> កំពុងតភ្ជាប់ទៅ Google Sheet...
+            </div>
+        </div>
+
+        <!-- Product Grid (Compact List with images and zoom modal) -->
+        <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <!-- Dynamic items loaded via script -->
+        </div>
+
+        <!-- Empty state -->
+        <div id="noResult" class="hidden text-center py-20 bg-white rounded-2xl border border-slate-200 mt-6 shadow-sm">
+            <p class="text-4xl mb-2">🔍</p>
+            <p class="text-lg font-semibold text-slate-700">រកមិនឃើញទំនិញដែលអ្នកកំពុងស្វែងរកទេ</p>
+            <p class="text-sm text-slate-400 mt-1">សូមព្យាយាមស្វែងរកដោយប្រើពាក្យគន្លឹះផ្សេង។</p>
+        </div>
+    </main>
+
+    <!-- Image Lightbox Modal for Zooming -->
+    <div id="imageModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex justify-center items-center p-4" onclick="closeModal()">
+        <div class="relative max-w-4xl max-h-[90vh] bg-white rounded-2xl overflow-hidden p-2 shadow-2xl" onclick="event.stopPropagation()">
+            <button onclick="closeModal()" class="absolute top-4 right-4 bg-slate-900/70 hover:bg-slate-900 text-white w-9 h-9 rounded-full flex items-center justify-center font-bold text-lg transition z-10">✕</button>
+            <img id="modalImg" src="" alt="Zoomed Product Image" class="max-h-[80vh] max-w-full object-contain mx-auto rounded-xl">
+            <div id="modalTitle" class="text-center font-bold text-slate-800 text-sm py-2 px-4"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-white py-8 mt-16 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 text-center text-sm text-slate-400">
+            <p>© 2026 Product Catalog System. រក្សាសិទ្ធិគ្រប់យ៉ាង។</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Fetching Dynamic Data directly from Google Sheet CSV -->
+    <script>
+        const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1iXLoDPlNtwBr-jfIR8Nd73dxarb9kfv5o3r3MCRCqIo/export?format=csv';
+
+        let products = [];
+        let currentCategory = 'all';
+        const grid = document.getElementById('productGrid');
+        const searchInput = document.getElementById('searchInput');
+        const noResult = document.getElementById('noResult');
+        const resultCount = document.getElementById('resultCount');
+        const syncStatus = document.getElementById('syncStatus');
+        const categoryTabsContainer = document.getElementById('categoryTabs');
+        const imageModal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImg');
+        const modalTitle = document.getElementById('modalTitle');
+
+        function parseCSV(text) {
+            const lines = text.split('\n');
+            const result = [];
+            
+            for (let i = 1; i < lines.length; i++) {
+                if (!lines[i].trim()) continue;
+                
+                const row = [];
+                let inQuotes = false;
+                let entry = '';
+                for (let char of lines[i]) {
+                    if (char === '"') {
+                        inQuotes = !inQuotes;
+                    } else if (char === ',' && !inQuotes) {
+                        row.push(entry.trim());
+                        entry = '';
+                    } else {
+                        entry += char;
+                    }
+                }
+                row.push(entry.trim());
+
+                if (row.length >= 2 && row[0]) {
+                    const name = row[0] || '';
+                    const code = row[1] || '';
+                    const variant = row[2] || '';
+                    const category = row[5] || 'Uncategorized';
+                    const linkphoto = row[10] || ''; // Row K: linkphoto
+
+                    result.push({
+                        name,
+                        code,
+                        variant,
+                        category,
+                        linkphoto
+                    });
+                }
+            }
+            return result;
+        }
+
+        async function fetchGoogleSheetData() {
+            try {
+                const response = await fetch(SHEET_CSV_URL);
+                const csvText = await response.text();
+                products = parseCSV(csvText);
+                
+                if (syncStatus) {
+                    syncStatus.textContent = '🟢 ទិន្នន័យបានធ្វើបច្ចុប្បន្នភាពរួចរាល់';
+                    syncStatus.className = 'text-xs px-3 py-1 bg-emerald-100 text-emerald-800 font-semibold rounded-full flex items-center gap-1.5';
+                }
+                
+                buildCategoryTabs();
+                filterData();
+            } catch (error) {
+                console.error('Error fetching Google Sheet:', error);
+                if (syncStatus) {
+                    syncStatus.textContent = '🔴 កំហុសក្នុងការទាញយកទិន្នន័យ';
+                    syncStatus.className = 'text-xs px-3 py-1 bg-rose-100 text-rose-800 font-semibold rounded-full flex items-center gap-1.5';
+                }
+                if (resultCount) {
+                    resultCount.textContent = 'មិនអាចផ្ទុកទិន្នន័យពី Google Sheet បានទេ';
+                }
+            }
+        }
+
+        function buildCategoryTabs() {
+            const categories = ['all', ...new Set(products.map(p => p.category).filter(Boolean))];
+            categoryTabsContainer.innerHTML = '';
+
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                const displayName = cat === 'all' ? 'ទាំងអស់ (All)' : cat;
+                btn.className = `cat-tab px-4 py-1.5 rounded-lg text-sm font-semibold transition whitespace-nowrap ${cat === currentCategory ? 'bg-amber-500 text-slate-900 shadow' : 'text-slate-300 hover:bg-slate-800'}`;
+                btn.textContent = displayName;
+                btn.onclick = () => setCategory(cat);
+                categoryTabsContainer.appendChild(btn);
+            });
+        }
+
+        function setCategory(cat) {
+            currentCategory = cat;
+            
+            document.querySelectorAll('.cat-tab').forEach(tab => {
+                if(tab.textContent === (cat === 'all' ? 'ទាំងអស់ (All)' : cat)) {
+                    tab.className = "cat-tab px-4 py-1.5 rounded-lg text-sm font-semibold transition bg-amber-500 text-slate-900 shadow whitespace-nowrap";
+                } else {
+                    tab.className = "cat-tab px-4 py-1.5 rounded-lg text-sm font-semibold transition text-slate-300 hover:bg-slate-800 whitespace-nowrap";
+                }
+            });
+
+            filterData();
+        }
+
+        function openModal(imgSrc, title) {
+            modalImg.src = imgSrc;
+            modalTitle.textContent = title;
+            imageModal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            imageModal.classList.add('hidden');
+            modalImg.src = '';
+        }
+
+        function renderProducts(items) {
+            if (!grid) return;
+            grid.innerHTML = '';
+            if (resultCount) {
+                resultCount.textContent = `បង្ហាញទំនិញសរុបចំនួន ${items.length} មុខ`;
+            }
+
+            if (items.length === 0) {
+                if (noResult) noResult.classList.remove('hidden');
+                return;
+            }
+            if (noResult) noResult.classList.add('hidden');
+
+            items.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-xl shadow-sm border border-slate-200/80 p-4 flex flex-col justify-between hover:shadow-md transition-all';
+                
+                // Image handling with click-to-zoom support
+                const imgSrc = p.linkphoto || 'https://placehold.co/300x200/f1f5f9/94a3b8?text=No+Image';
+                const imgHtml = `
+                    <div class="w-full h-44 bg-slate-100 rounded-lg overflow-hidden mb-3 border border-slate-100 relative cursor-pointer group" onclick="openModal('${imgSrc}', '${p.name.replace(/'/g, "\\'")}')">
+                        <img src="${imgSrc}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.onerror=null; this.src='https://placehold.co/300x200/f1f5f9/94a3b8?text=No+Image';">
+                        <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-xs font-semibold gap-1">
+                            🔍 ចុចមើលរូបធំ
+                        </div>
+                    </div>`;
+
+                card.innerHTML = `
+                    <div>
+                        ${imgHtml}
+                        <div class="flex justify-between items-start gap-2 mb-2">
+                            <span class="text-xs font-mono font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded border border-amber-200/60">${p.code}</span>
+                            <span class="text-[11px] font-semibold text-slate-600 bg-slate-100 px-2.5 py-0.5 rounded border border-slate-200">${p.variant || '-'}</span>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-sm leading-snug mb-2">${p.name}</h3>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">
+                        <span class="text-[11px] font-semibold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded border border-indigo-100">${p.category || '-'}</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterData() {
+            const query = searchInput.value.toLowerCase();
+
+            const filtered = products.filter(p => {
+                const matchesQuery = p.name.toLowerCase().includes(query) || p.code.toLowerCase().includes(query);
+                const matchesCat = currentCategory === 'all' || p.category === currentCategory;
+                return matchesQuery && matchesCat;
+            });
+
+            renderProducts(filtered);
+        }
+
+        searchInput.addEventListener('input', filterData);
+
+        fetchGoogleSheetData();
+    </script>
+</body>
+</html>
