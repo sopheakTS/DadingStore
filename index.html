@@ -221,11 +221,21 @@
                 const card = document.createElement('div');
                 card.className = 'bg-white rounded-xl shadow-sm border border-slate-200/80 p-2.5 md:p-4 flex flex-col justify-between hover:shadow-md transition-all';
                 
-                // Image handling with click-to-zoom support
+                // Image handling with click-to-zoom support and upper-right product code badge with ~50% background opacity
                 const imgSrc = p.linkphoto || 'https://placehold.co/300x200/f1f5f9/94a3b8?text=No+Image';
                 const imgHtml = `
                     <div class="w-full h-32 sm:h-40 md:h-44 bg-slate-100 rounded-lg overflow-hidden mb-2.5 md:mb-3 border border-slate-100 relative cursor-pointer group" onclick="openModal('${imgSrc}', '${p.name.replace(/'/g, "\\'")}')">
                         <img src="${imgSrc}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.onerror=null; this.src='https://placehold.co/300x200/f1f5f9/94a3b8?text=No+Image';">
+                        
+                        <!-- Product Code positioned at the upper right with 50% background opacity -->
+                        ${p.code ? `
+                            <div class="absolute top-2 right-2 z-10">
+                                <span class="text-[10px] md:text-xs font-mono font-bold text-amber-900 bg-amber-400/50 backdrop-blur-sm px-2.5 py-1 rounded shadow-sm border border-amber-300/40">
+                                    ${p.code}
+                                </span>
+                            </div>
+                        ` : ''}
+
                         <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-[11px] font-semibold gap-1">
                             🔍 ចុចមើលរូបធំ
                         </div>
@@ -235,13 +245,12 @@
                     <div>
                         ${imgHtml}
                         <div class="flex justify-between items-start gap-1.5 mb-1.5">
-                            <span class="text-[10px] md:text-xs font-mono font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200/60 truncate max-w-[60%]">${p.code}</span>
-                            <span class="text-[10px] md:text-[11px] font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 truncate max-w-[40%]">${p.variant || '-'}</span>
+                            <!-- Size / Variant placed where code used to be with ~50% background opacity -->
+                            <span class="text-[11px] md:text-xs font-bold text-amber-900 bg-amber-100/50 backdrop-blur-sm px-2.5 py-1 rounded border border-amber-200/40 max-w-[70%] truncate shadow-sm">
+                                ${p.variant || 'Standard'}
+                            </span>
                         </div>
                         <h3 class="font-bold text-slate-900 text-xs md:text-sm leading-snug mb-2 line-clamp-2">${p.name}</h3>
-                    </div>
-                    <div class="pt-2.5 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">
-                        <span class="text-[10px] md:text-[11px] font-semibold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded border border-indigo-100 truncate max-w-full">${p.category || '-'}</span>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -251,7 +260,11 @@
         function filterData() {
             const query = searchInput.value.toLowerCase();
 
-            const filtered = products.filter(p => {
+            const filtered = products.products ? products.filter(p => {
+                const matchesQuery = p.name.toLowerCase().includes(query) || p.code.toLowerCase().includes(query);
+                const matchesCat = currentCategory === 'all' || p.category === currentCategory;
+                return matchesQuery && matchesCat;
+            }) : products.filter(p => {
                 const matchesQuery = p.name.toLowerCase().includes(query) || p.code.toLowerCase().includes(query);
                 const matchesCat = currentCategory === 'all' || p.category === currentCategory;
                 return matchesQuery && matchesCat;
