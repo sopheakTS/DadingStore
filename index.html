@@ -84,9 +84,10 @@
         </div>
     </footer>
 
-    <!-- JavaScript for Fetching Dynamic Data directly from Google Sheet CSV -->
+    <!-- JavaScript for Fetching Dynamic Data via Secure Proxy API -->
     <script>
-        const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1iXLoDPlNtwBr-jfIR8Nd73dxarb9kfv5o3r3MCRCqIo/export?format=csv';
+        // លែងដាក់ Link Google Sheet ផ្ទាល់ហើយ គឺប្តូរមកប្រើ API ក្នុងស្រុកវិញដើម្បីលាក់លਿੰកពិត
+        const SHEET_CSV_URL = '/api/products';
 
         let products = [];
         let currentCategory = 'all';
