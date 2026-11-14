@@ -4,268 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DADING STORE</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Kantumruy Pro', sans-serif; }
-        /* Hide scrollbar for Chrome, Safari and Opera */
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        /* Hide scrollbar for IE, Edge and Firefox */
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800">
+<body class="bg-[#f4f7f6] text-slate-800">
 
-    <!-- Header / Hero Section (Modernized Style) -->
-    <header class="bg-gradient-to-r from-slate-900 via-slate-800 to-amber-600 text-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-4 md:py-5 flex flex-col md:flex-row justify-between items-center gap-3 md:gap-4">
-            <div class="flex items-center gap-3 w-full md:w-auto">
-                <div class="p-2.5 md:p-3 bg-amber-500 rounded-xl text-slate-900 font-bold text-lg md:text-xl shadow">
-                    🛠️
-                </div>
-                <div>
-                    <h1 class="text-lg md:text-3xl font-extrabold tracking-tight">DADING STORE</h1>
-                    <p class="text-[11px] md:text-sm text-amber-300 font-medium mt-0.5">មានលក់រាយ និងបោះដុំសម្ភារៈជាង ម៉ូទ័រនិងសម្ភារៈបន្ទប់ទឹក </p>
-                </div>
-            </div>
+    <!-- Header -->
+    <header class="bg-[#0c1439] text-white sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap md:flex-nowrap justify-between items-center gap-4">
             
-            <!-- Search Bar & Telegram Contact Button -->
-            <div class="flex items-center gap-2.5 w-full md:w-auto">
-                <div class="relative w-full md:w-72">
-                    <input type="text" id="searchInput" placeholder="ស្វែងរកឈ្មោះទំនិញ ឬកូដ..." class="w-full px-4 py-2.5 pl-10 rounded-xl bg-slate-700/60 border border-slate-600 text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 transition">
-                    <svg class="w-5 h-5 text-slate-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            <!-- Logo & Brand -->
+            <div class="flex items-center gap-3 cursor-pointer shrink-0 order-1" onclick="showHome()">
+                <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-inner">
+                    <span class="text-[#0c1439] font-black text-2xl tracking-tighter">DS</span>
                 </div>
-                <!-- Telegram Contact Button -->
-                <a href="https://t.me/Sopheak1688" target="_blank" rel="noopener noreferrer" class="bg-sky-500 hover:bg-sky-600 text-white px-3.5 py-2.5 rounded-xl font-medium text-sm flex items-center gap-2 shadow-md transition shrink-0" title="ទំនាក់ទំនង Telegram">
-                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.622-.168.9-.5 1.201-.82 1.23-.697.064-1.228-.461-1.901-.903-1.056-.693-1.653-1.124-2.678-1.8-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.329-.913.489-1.302.481-.428-.009-1.252-.242-1.865-.442-752-.245-1.349-.375-1.297-.789.027-.216.324-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.14.12.098.153.228.166.331.011.095.024.312.011.482z"/></svg>
-                    <span class="hidden sm:inline">ទំនាក់ទំនង</span>
-                </a>
+                <div class="flex flex-col">
+                    <h1 class="text-xl md:text-2xl font-extrabold tracking-tight leading-tight">DADING CAMBODIA</h1>
+                    <p class="text-[10px] md:text-xs text-blue-300 font-medium tracking-wide">TOOLS & MACHINERY</p>
+                </div>
             </div>
-        </div>
 
-        <!-- Brand Navigation Tabs (Mobile Optimized Smooth Scroll) -->
-        <div class="bg-slate-900/90 backdrop-blur border-t border-slate-700/50">
-            <div class="max-w-7xl mx-auto px-4 flex overflow-x-auto gap-2 py-2.5 no-scrollbar touch-pan-x" id="categoryTabs">
-                <button onclick="setCategory('all')" class="cat-tab px-4 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition bg-amber-500 text-slate-900 shadow shrink-0" data-cat="all">ទាំងអស់ (All)</button>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Container -->
-    <main class="max-w-7xl mx-auto px-3 md:px-4 py-6 md:py-8">
-        <!-- Product Grid (Responsive columns: 2 cols on mobile, 3-4 cols on tablet/desktop) -->
-        <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
-            <!-- Dynamic items loaded via script -->
-        </div>
-
-        <!-- Empty state -->
-        <div id="noResult" class="hidden text-center py-20 bg-white rounded-2xl border border-slate-200 mt-6 shadow-sm">
-            <p class="text-4xl mb-2">🔍</p>
-            <p class="text-lg font-semibold text-slate-700">រកមិនឃើញទំនិញដែលអ្នកកំពុងស្វែងរកទេ</p>
-            <p class="text-sm text-slate-400 mt-1">សូមព្យាយាមស្វែងរកដោយប្រើពាក្យគន្លឹះផ្សេង។</p>
-        </div>
-    </main>
-
-    <!-- Image Lightbox Modal for Zooming -->
-    <div id="imageModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex justify-center items-center p-4" onclick="closeModal()">
-        <div class="relative max-w-4xl w-full max-h-[90vh] bg-white rounded-2xl overflow-hidden p-3 md:p-4 shadow-2xl flex flex-col items-center" onclick="event.stopPropagation()">
-            <button onclick="closeModal()" class="absolute top-3 right-3 bg-slate-900/70 hover:bg-slate-900 text-white w-9 h-9 rounded-full flex items-center justify-center font-bold text-lg transition z-10">✕</button>
-            <div class="w-full overflow-y-auto max-h-[80vh] flex flex-col items-center">
-                <img id="modalImg" src="" alt="Zoomed Product Image" class="max-h-[70vh] max-w-full object-contain mx-auto rounded-xl">
-                <div id="modalTitle" class="text-center font-bold text-slate-900 text-sm md:text-base py-3 px-4 mt-2"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="bg-slate-900 text-white py-8 mt-16 border-t border-slate-800">
-        <div class="max-w-7xl mx-auto px-4 text-center text-sm text-slate-400">
-            <p>© 2026 Product Catalog System. រក្សាសិទ្ធិគ្រប់យ៉ាង។</p>
-        </div>
-    </footer>
-
-    <!-- JavaScript for Fetching Dynamic Data directly from Google Sheet CSV -->
-    <script>
-        const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1iXLoDPlNtwBr-jfIR8Nd73dxarb9kfv5o3r3MCRCqIo/export?format=csv';
-
-        let products = [];
-        let currentCategory = 'all';
-        let currentModalData = { imgSrc: '', title: '', code: '', variant: '' };
-        const grid = document.getElementById('productGrid');
-        const searchInput = document.getElementById('searchInput');
-        const noResult = document.getElementById('noResult');
-        const categoryTabsContainer = document.getElementById('categoryTabs');
-        const imageModal = document.getElementById('imageModal');
-        const modalImg = document.getElementById('modalImg');
-        const modalTitle = document.getElementById('modalTitle');
-
-        function parseCSV(text) {
-            const lines = text.split('\n');
-            const result = [];
-            
-            for (let i = 1; i < lines.length; i++) {
-                if (!lines[i].trim()) continue;
-                
-                const row = [];
-                let inQuotes = false;
-                let entry = '';
-                for (let char of lines[i]) {
-                    if (char === '"') {
-                        inQuotes = !inQuotes;
-                    } else if (char === ',' && !inQuotes) {
-                        row.push(entry.trim());
-                        entry = '';
-                    } else {
-                        entry += char;
-                    }
-                }
-                row.push(entry.trim());
-
-                if (row.length >= 2 && row[0]) {
-                    const name = row[0] || '';
-                    const code = row[1] || '';
-                    const variant = row[2] || '';
-                    const category = row[5] || 'Uncategorized';
-                    const linkphoto = row[10] || ''; // Row K: linkphoto
-
-                    result.push({
-                        name,
-                        code,
-                        variant,
-                        category,
-                        linkphoto
-                    });
-                }
-            }
-            return result;
-        }
-
-        async function fetchGoogleSheetData() {
-            try {
-                const response = await fetch(SHEET_CSV_URL);
-                const csvText = await response.text();
-                products = parseCSV(csvText);
-                
-                buildCategoryTabs();
-                filterData();
-            } catch (error) {
-                console.error('Error fetching Google Sheet:', error);
-            }
-        }
-
-        function buildCategoryTabs() {
-            const categories = ['all', ...new Set(products.map(p => p.category).filter(Boolean))];
-            categoryTabsContainer.innerHTML = '';
-
-            categories.forEach(cat => {
-                const btn = document.createElement('button');
-                const displayName = cat === 'all' ? 'ទាំងអស់ (All)' : cat;
-                btn.className = `cat-tab px-4 py-1.5 rounded-lg text-sm font-semibold transition whitespace-nowrap ${cat === currentCategory ? 'bg-amber-500 text-slate-900 shadow' : 'text-slate-300 hover:bg-slate-800'}`;
-                btn.textContent = displayName;
-                btn.onclick = () => setCategory(cat);
-                categoryTabsContainer.appendChild(btn);
-            });
-        }
-
-        function setCategory(cat) {
-            currentCategory = cat;
-            
-            document.querySelectorAll('.cat-tab').forEach(tab => {
-                if(tab.textContent === (cat === 'all' ? 'ទាំងអស់ (All)' : cat)) {
-                    tab.className = "cat-tab px-4 py-1.5 rounded-lg text-sm font-semibold transition bg-amber-500 text-slate-900 shadow whitespace-nowrap";
-                } else {
-                    tab.className = "cat-tab px-4 py-1.5 rounded-lg text-sm font-semibold transition text-slate-300 hover:bg-slate-800 whitespace-nowrap";
-                }
-            });
-
-            filterData();
-        }
-
-        function openModal(imgSrc, name, code, variant) {
-            currentModalData = { imgSrc, name, code, variant };
-            modalImg.src = imgSrc;
-            modalTitle.innerHTML = `${code ? `<span class='text-amber-600 font-mono'>[${code}]</span> ` : ''}${name} ${variant ? `<span class='text-slate-500'>(${variant})</span>` : ''}`;
-            imageModal.classList.remove('hidden');
-        }
-
-        function closeModal() {
-            imageModal.classList.add('hidden');
-            modalImg.src = '';
-        }
-
-        function renderProducts(items) {
-            if (!grid) return;
-            grid.innerHTML = '';
-
-            if (items.length === 0) {
-                if (noResult) noResult.classList.remove('hidden');
-                return;
-            }
-            if (noResult) noResult.classList.add('hidden');
-
-            items.forEach(p => {
-                const card = document.createElement('div');
-                card.className = 'bg-white rounded-xl shadow-sm border border-slate-200/80 p-2.5 md:p-4 flex flex-col justify-between hover:shadow-md transition-all';
-                
-                // Image handling with click-to-zoom support and upper-right product code badge with ~50% background opacity
-                const imgSrc = p.linkphoto || 'https://placehold.co/300x200/f1f5f9/94a3b8?text=No+Image';
-                const safeName = p.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-                const safeCode = p.code.replace(/'/g, "\\'");
-                const safeVariant = p.variant.replace(/'/g, "\\'");
-
-                const imgHtml = `
-                    <div class="w-full h-32 sm:h-40 md:h-44 bg-slate-100 rounded-lg overflow-hidden mb-2.5 md:mb-3 border border-slate-100 relative cursor-pointer group" onclick="openModal('${imgSrc}', '${safeName}', '${safeCode}', '${safeVariant}')">
-                        <img src="${imgSrc}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.onerror=null; this.src='https://placehold.co/300x200/f1f5f9/94a3b8?text=No+Image';">
-                        
-                        <!-- Product Code positioned at the upper right with 50% background opacity -->
-                        ${p.code ? `
-                            <div class="absolute top-2 right-2 z-10">
-                                <span class="text-[10px] md:text-xs font-mono font-bold text-amber-900 bg-amber-400/50 backdrop-blur-sm px-2.5 py-1 rounded shadow-sm border border-amber-300/40">
-                                    ${p.code}
-                                </span>
-                            </div>
-                        ` : ''}
-
-                        <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-[11px] font-semibold gap-1">
-                            🔍 ចុចមើលរូបធំ
-                        </div>
-                    </div>`;
-
-                card.innerHTML = `
-                    <div>
-                        ${imgHtml}
-                        <div class="flex justify-between items-start gap-1.5 mb-1.5">
-                            <!-- Size / Variant placed where code used to be with ~50% background opacity -->
-                            <span class="text-[11px] md:text-xs font-bold text-amber-900 bg-amber-100/50 backdrop-blur-sm px-2.5 py-1 rounded border border-amber-200/40 max-w-[70%] truncate shadow-sm">
-                                ${p.variant || 'Standard'}
-                            </span>
-                        </div>
-                        <h3 class="font-bold text-slate-900 text-xs md:text-sm leading-snug mb-2 line-clamp-2">${p.name}</h3>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function filterData() {
-            const query = searchInput.value.toLowerCase();
-
-            const filtered = products.products ? products.filter(p => {
-                const matchesQuery = p.name.toLowerCase().includes(query) || p.code.toLowerCase().includes(query);
-                const matchesCat = currentCategory === 'all' || p.category === currentCategory;
-                return matchesQuery && matchesCat;
-            }) : products.filter(p => {
-                const matchesQuery = p.name.toLowerCase().includes(query) || p.code.toLowerCase().includes(query);
-                const matchesCat = currentCategory === 'all' || p.category === currentCategory;
-                return matchesQuery && matchesCat;
-            });
-
-            renderProducts(filtered);
-        }
-
-        searchInput.addEventListener('input', filterData);
-
-        fetchGoogleSheetData();
-    </script>
-</body>
-</html>
+            <!-- Right Actions (Contact, Search) -->
+            <div class="flex items-center gap-2 md:gap-5 w-full md:w-auto order-2 md:order-3 justify-between md:justify-end shrink-0">
+                <!-- Search & Language Toggle -->
+                <div class="flex items-center gap-2 w-full sm:w-auto shrink-0">
+                    <div class="relative flex-1 sm:w-48 md:w-56 shrink-
