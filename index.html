@@ -178,4 +178,393 @@
                         <!-- Map Placeholder -->
                         <a href="https://maps.app.goo.gl/YYMbSPxZV8tap7pT9" target="_blank" class="bg-slate-200 hover:bg-slate-300 transition-colors rounded-2xl overflow-hidden min-h-[250px] relative flex items-center justify-center border border-slate-200 group">
                             <div class="text-center p-4">
-                                <svg class="w-12 h-12 text-blue-500 mx-auto mb-2 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                <svg class="w-12 h-12 text-blue-500 mx-auto mb-2 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                <span id="aboutMapLabel" class="text-blue-600 font-medium text-sm block">ទីតាំងផែនទី (ចុចដើម្បីមើល)</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Image Lightbox Modal for Zooming -->
+    <div id="imageModal" class="hidden fixed inset-0 z-[100] bg-slate-900/90 backdrop-blur-sm flex justify-center items-center p-4 transition-all" onclick="closeModal()">
+        <div class="relative max-w-4xl w-full max-h-[90vh] bg-white rounded-3xl overflow-hidden p-4 shadow-2xl flex flex-col items-center" onclick="event.stopPropagation()">
+            <button onclick="closeModal()" class="absolute top-4 right-4 bg-slate-100 hover:bg-slate-200 text-slate-800 w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl transition z-10">✕</button>
+            <div class="w-full overflow-y-auto max-h-[80vh] flex flex-col items-center">
+                <img id="modalImg" src="" class="max-h-[60vh] max-w-full object-contain mx-auto rounded-xl">
+                <div id="modalTitle" class="text-center font-bold text-slate-900 text-base md:text-lg py-4 px-4 mt-2 border-t w-full"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Logic -->
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbw-QihTeMYtZM0YqpS8MiEqa9Kqy5gZu1ijRX6zwOeHwVlYB0J3vCPfIw_PIXQNtXK3/exec'; 
+        
+        const COL_NAME_KM = 0; const COL_NAME_ZH = 1; const COL_CODE = 2; const COL_VARIANT = 4;
+        const COL_SALE_PRICE = 5; const COL_BRAND = 8;
+        const COL_CATEGORY_KM = 9; const COL_CATEGORY_ZH = 10; const COL_PHOTO = 14;
+
+        let products = [];
+        let globalBrandOrder = [];
+        let globalCatOrder = [];
+        
+        let currentFilterType = 'all'; 
+        let currentFilterValue = '';
+        let currentLang = 'km'; 
+
+        const searchInput = document.getElementById('searchInput');
+        const homeView = document.getElementById('homeView');
+        const productView = document.getElementById('productView');
+        const aboutView = document.getElementById('aboutView');
+        const productGroupContainer = document.getElementById('productGroupContainer');
+        const imageModal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImg');
+        const modalTitle = document.getElementById('modalTitle');
+
+        const posters = [
+            'https://i.ibb.co/1jqcdSd/POSTER1.webp', 
+            'https://i.ibb.co/svfjbngW/POSTER2.webp',
+            'https://i.ibb.co/cXs83BCs/POSTER3.webp'
+        ];
+
+        const brandLogos = {
+            'BESTIR': 'https://i.ibb.co/FLcghtfq/bester-logo.webp',
+            'COROLLA': 'https://i.ibb.co/5XJn2fRF/COROLLA-LOGO.webp',
+            'DADING': 'https://i.ibb.co/sJ6nYB5s/DADING-LOGO.webp',
+            'JC TOP': 'https://i.ibb.co/PvkD2WJ9/JC-top-logo.webp'
+        };
+
+        function translateVariant(variantStr) {
+            if (currentLang === 'km' || !variantStr) return variantStr;
+            let translated = String(variantStr);
+            const dict = { 'ប្រអប់': '盒', 'កំប៉ុង': '罐', 'កេស': '箱', 'កញ្ចប់': '包', 'បាវ': '袋' };
+            for (let key in dict) translated = translated.split(key).join(dict[key]);
+            return translated;
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'km' ? 'zh' : 'km';
+            document.getElementById('langToggleBtn').innerText = currentLang === 'km' ? '🇰🇭' : '🇨🇳';
+            
+            document.getElementById('navHome').innerText = currentLang === 'km' ? 'ទំព័រដើម' : '首页';
+            document.getElementById('navBrands').innerText = currentLang === 'km' ? 'ម៉ាកយីហោ' : '品牌';
+            document.getElementById('navCategories').innerText = currentLang === 'km' ? 'ប្រភេទទំនិញ' : '类别';
+            document.getElementById('navAbout').innerText = currentLang === 'km' ? 'អំពីយើង' : '关于我们';
+            document.getElementById('breadcrumbHome').innerText = currentLang === 'km' ? 'ទំព័រដើម' : '首页';
+            document.getElementById('homeTitleBrand').innerText = currentLang === 'km' ? 'ម៉ាកយីហោ' : '品牌';
+            document.getElementById('homeTitleCat').innerText = currentLang === 'km' ? 'ប្រភេទទំនិញ' : '类别';
+            searchInput.placeholder = currentLang === 'km' ? 'ស្វែងរក...' : '搜索...';
+            
+            document.getElementById('aboutTitleHero').innerText = currentLang === 'km' ? 'អំពីយើង' : '关于我们';
+            document.getElementById('aboutDesc').innerText = currentLang === 'km' ?
+                'ផ្តល់ជូននូវសម្ភារៈជាង ម៉ូទ័រ និងសម្ភារៈបន្ទប់ទឹកគ្រប់ប្រភេទ មានលក់ដុំ និងលក់រាយ ជាមួយនឹងតម្លៃសមរម្យ និងគុណភាពខ្ពស់។ យើងខ្ញុំប្តេជ្ញាផ្តល់ជូននូវសេវាកម្មដ៏ល្អឥតខ្ចោះដល់អតិថិជនគ្រប់រូប។' :
+                '提供各类五金工具、电机及卫浴配件，批发零售兼营，价格合理，品质优良。我们致力于为每一位客户提供优质的服务。';
+            document.getElementById('aboutContactTitle').innerHTML = currentLang === 'km' ?
+                '<svg class="w-5 h-5 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg> ទំនាក់ទំនង' : 
+                '<svg class="w-5 h-5 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg> 联系我们';
+            document.getElementById('aboutPhoneLabel').innerText = currentLang === 'km' ? 'លេខទូរស័ព្ទ:' : '电话号码:';
+            document.getElementById('aboutTimeLabel').innerText = currentLang === 'km' ? 'ម៉ោងធ្វើការ:' : '营业时间:';
+            document.getElementById('aboutTimeVal').innerText = currentLang === 'km' ? 'ច័ន្ទ - អាទិត្យ (8:00 ព្រឹក - 5:00 ល្ងាច)' : '周一至周日 (上午 8:00 - 下午 5:00)';
+            document.getElementById('aboutAddressLabel').innerText = currentLang === 'km' ? 'អាសយដ្ឋាន:' : '地址:';
+            document.getElementById('aboutAddressVal').innerText = currentLang === 'km' ? '[សង្កាត់ព្រៃស ខណ្ឌដង្កោរ រាជធានីភ្នំពេញ]' : '[在此处输入您的店铺地址]';
+            document.getElementById('aboutMapLabel').innerText = currentLang === 'km' ? 'ទីតាំងផែនទី (ចុចដើម្បីមើល)' : '地图位置 (点击查看)';
+
+            buildHomeGrids();
+            updateSidebarInfo();
+            if (!productView.classList.contains('hidden')) filterData();
+        }
+
+        let slideIdx = 0;
+        setInterval(() => {
+            if (posters.length === 0) return;
+            slideIdx = (slideIdx + 1) % posters.length;
+            const imgEl = document.getElementById('sliderImg');
+            if(imgEl) {
+                imgEl.style.opacity = 0;
+                setTimeout(() => {
+                    imgEl.src = posters[slideIdx];
+                    imgEl.style.opacity = 1;
+                    const dots = document.getElementById('sliderDots');
+                    if(dots) {
+                        const dotsChildren = dots.children;
+                        for(let i=0; i<dotsChildren.length; i++){
+                            dotsChildren[i].className = i === slideIdx ? 'w-2.5 h-2.5 rounded-full bg-white shadow' : 'w-2.5 h-2.5 rounded-full bg-white/50 shadow';
+                        }
+                    }
+                }, 300);
+            }
+        }, 4000);
+
+        function parseJSONData(rows) {
+            const result = [];
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                if (row.length >= 2 && row[COL_NAME_KM]) {
+                    result.push({
+                        nameKm: String(row[COL_NAME_KM] || ''), nameZh: String(row[COL_NAME_ZH] || ''),
+                        code: String(row[COL_CODE] || ''), variant: String(row[COL_VARIANT] || ''),
+                        salePrice: String(row[COL_SALE_PRICE] || ''),
+                        brand: String(row[COL_BRAND] || 'Other'), categoryKm: String(row[COL_CATEGORY_KM] || 'Uncategorized'),
+                        categoryZh: String(row[COL_CATEGORY_ZH] || row[COL_CATEGORY_KM] || 'Uncategorized'),
+                        linkphoto: String(row[COL_PHOTO] || '')
+                    });
+                }
+            }
+            return result;
+        }
+
+        async function fetchGoogleSheetData() {
+            try {
+                const response = await fetch(API_URL);
+                const rawData = await response.json();
+                
+                if (rawData && rawData.error) {
+                    alert("⚠️ បញ្ហាពីទិន្នន័យ (API): " + rawData.error);
+                    return;
+                }
+                
+                products = parseJSONData(rawData);
+                buildHomeGrids();
+            } catch (error) { 
+                console.error('Error fetching data:', error);
+                alert("⚠️ មិនអាចទាញយកទិន្នន័យបានទេ! សូមឆែកអ៊ីនធឺណិត ឬ API Link។\n" + error.message);
+            }
+        }
+
+        function buildHomeGrids() {
+            const brandMap = {}, catMap = {};
+            const brandOrder = [], catOrder = [];   
+
+            products.forEach(p => {
+                if (!brandMap[p.brand]) { brandMap[p.brand] = p.linkphoto; brandOrder.push(p.brand); }
+                if (!catMap[p.categoryKm]) {
+                    catMap[p.categoryKm] = { kmName: p.categoryKm, zhName: p.categoryZh, img: p.linkphoto };
+                    catOrder.push(p.categoryKm);
+                } else if (!catMap[p.categoryKm].img && p.linkphoto) { catMap[p.categoryKm].img = p.linkphoto; }
+            });
+
+            globalBrandOrder = brandOrder;
+            globalCatOrder = catOrder;
+
+            document.getElementById('homeBrandsGrid').innerHTML = brandOrder.map(b => {
+                const safeB = String(b).trim();
+                const brandKey = safeB.toUpperCase();
+                const brandLogo = brandLogos[brandKey] || `https://placehold.co/200x100/ffffff/0c1439?text=${encodeURIComponent(safeB)}`;
+                return `<div onclick="showBrand(this.getAttribute('data-brand'))" data-brand="${safeB.replace(/"/g, '&quot;')}" class="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col items-center justify-center cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all group h-32">
+                    <img src="${brandLogo}" class="h-16 w-full object-contain mb-2 mix-blend-multiply group-hover:scale-105 transition" onerror="this.src='https://placehold.co/200x100?text=${encodeURIComponent(safeB)}'">
+                    <span class="font-bold text-xs text-slate-500 mt-1">${safeB}</span>
+                </div>`;
+            }).join('');
+
+            document.getElementById('homeCategoriesGrid').innerHTML = catOrder.map(catKey => {
+                const c = catMap[catKey];
+                const img = c.img || 'https://placehold.co/200?text=Category';
+                const displayName = currentLang === 'km' ? c.kmName : c.zhName;
+                return `<div onclick="showCategory(this.getAttribute('data-cat'))" data-cat="${c.kmName.replace(/"/g, '&quot;')}" class="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col items-center justify-center cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all group">
+                    <img src="${img}" class="h-16 md:h-20 w-16 md:w-20 object-contain mb-3 mix-blend-multiply group-hover:scale-110 transition" onerror="this.src='https://placehold.co/200?text=IMG'">
+                    <span class="font-extrabold text-sm text-slate-800 text-center line-clamp-1">${displayName}</span>
+                </div>`;
+            }).join('');
+        }
+
+        function showHome() {
+            currentFilterType = 'all'; currentFilterValue = ''; searchInput.value = '';
+            homeView.classList.remove('hidden'); productView.classList.add('hidden'); aboutView.classList.add('hidden');
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+        
+        function showAbout() {
+            homeView.classList.add('hidden'); productView.classList.add('hidden'); aboutView.classList.remove('hidden');
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        function scrollToSection(id) {
+            showHome(); setTimeout(() => document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+        }
+
+        function showCategory(catKmName) {
+            currentFilterType = 'category'; currentFilterValue = String(catKmName); searchInput.value = '';
+            homeView.classList.add('hidden'); aboutView.classList.add('hidden'); productView.classList.remove('hidden');
+            window.scrollTo({top: 0}); updateSidebarInfo(); filterData();
+        }
+
+        function showBrand(brandName) {
+            currentFilterType = 'brand'; currentFilterValue = String(brandName); searchInput.value = '';
+            homeView.classList.add('hidden'); aboutView.classList.add('hidden'); productView.classList.remove('hidden');
+            window.scrollTo({top: 0}); updateSidebarInfo(); filterData();
+        }
+
+        function updateSidebarInfo() {
+            let title = '', subtitle = '', iconSrc = 'https://placehold.co/100?text=IMG';
+            if (currentFilterType === 'category') {
+                const sample = products.find(p => p.categoryKm === currentFilterValue);
+                title = sample ? (currentLang === 'km' ? sample.categoryKm : sample.categoryZh) : currentFilterValue;
+                subtitle = currentLang === 'km' ? 'ប្រភេទទំនិញ' : '类别';
+                if (sample && sample.linkphoto) iconSrc = sample.linkphoto;
+            } else if (currentFilterType === 'brand') {
+                title = currentFilterValue; subtitle = currentLang === 'km' ? 'ម៉ាកយីហោ' : '品牌';
+                const safeBrand = String(currentFilterValue).trim().toUpperCase();
+                iconSrc = brandLogos[safeBrand] || `https://placehold.co/200x100/ffffff/0c1439?text=${encodeURIComponent(currentFilterValue)}`;
+            } else if (currentFilterType === 'search') {
+                title = currentLang === 'km' ? 'លទ្ធផលស្វែងរក' : '搜索结果'; subtitle = searchInput.value;
+            }
+            document.getElementById('sidebarTitle').innerText = title;
+            document.getElementById('sidebarSubtitle').innerText = subtitle;
+            document.getElementById('breadcrumbCurrent').innerText = title;
+            document.getElementById('pageTitle').innerText = title;
+            document.getElementById('sidebarIcon').src = iconSrc;
+        }
+
+        function filterData() {
+            const query = searchInput.value.toLowerCase().trim();
+            let filtered = products;
+
+            if ((!homeView.classList.contains('hidden') || !aboutView.classList.contains('hidden')) && query !== '') {
+                currentFilterType = 'search'; homeView.classList.add('hidden'); aboutView.classList.add('hidden');
+                productView.classList.remove('hidden'); updateSidebarInfo();
+            }
+
+            if (currentFilterType === 'category') filtered = filtered.filter(p => p.categoryKm === currentFilterValue);
+            else if (currentFilterType === 'brand') filtered = filtered.filter(p => p.brand === currentFilterValue);
+
+            if (query !== '') {
+                filtered = filtered.filter(p => p.nameZh.toLowerCase().includes(query) || p.nameKm.toLowerCase().includes(query) || p.code.toLowerCase().includes(query) || p.brand.toLowerCase().includes(query));
+            }
+
+            document.getElementById('productCountBadge').innerText = filtered.length;
+            renderProductsGrouped(filtered);
+            renderBottomNav();
+        }
+
+        searchInput.addEventListener('input', () => {
+            if(searchInput.value.trim() === '' && currentFilterType === 'search') showHome();
+            else filterData();
+        });
+
+        function renderProductsGrouped(items) {
+            productGroupContainer.innerHTML = '';
+            if (items.length === 0) {
+                productGroupContainer.innerHTML = `<div class="py-16 text-center text-slate-500 font-bold text-xl">${currentLang === 'km' ? 'រកមិនឃើញទំនិញ' : '未找到产品'}</div>`;
+                return;
+            }
+
+            const grouped = {}; const groupOrder = [];
+            items.forEach(p => {
+                const key = currentFilterType === 'brand' ? (currentLang === 'km' ? p.categoryKm : p.categoryZh) : p.brand;
+                if (!grouped[key]) { grouped[key] = []; groupOrder.push(key); }
+                grouped[key].push(p);
+            });
+
+            groupOrder.forEach(key => {
+                const groupHtml = `<div class="mb-10">
+                    <div class="flex items-center gap-3 mb-4">
+                        <h2 class="text-xl md:text-2xl font-extrabold text-slate-900">${key}</h2>
+                        <span class="bg-slate-100 border border-slate-200 text-slate-500 text-xs font-bold px-2 py-0.5 rounded-full shadow-sm">${grouped[key].length}</span>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+                        ${grouped[key].map(p => generateProductCardHTML(p)).join('')}
+                    </div>
+                </div>`;
+                productGroupContainer.insertAdjacentHTML('beforeend', groupHtml);
+            });
+        }
+
+        function generateProductCardHTML(p) {
+            const imgSrc = p.linkphoto || 'https://placehold.co/300?text=No+Image';
+            const displayName = currentLang === 'km' ? p.nameKm : p.nameZh;
+            const displayVariant = translateVariant(p.variant) || (currentLang === 'km' ? 'ស្តង់ដារ' : '标准');
+            const safeName = displayName.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+            const safeVariantRaw = (p.variant || '').replace(/'/g, "\\'");
+            const brandBadge = p.brand ? `<div class="w-8 h-8 rounded bg-blue-900 text-white flex items-center justify-center text-[9px] font-bold shadow">${p.brand.substring(0,4).toUpperCase()}</div>` : '';
+
+            // លុបផ្នែកតម្លៃចេញទាំងស្រុង ទុកតែ Logo ម៉ាកយីហោនៅខាងស្តាំ
+            return `<div class="bg-white rounded-2xl border border-slate-200 p-3 hover:shadow-xl hover:border-amber-300 transition-all flex flex-col justify-between cursor-pointer group" onclick="openModal('${imgSrc}', '${safeName}', '${p.code}', '${safeVariantRaw}')">
+                <div class="mb-3 bg-[#f8fafc] rounded-xl p-2 flex items-center justify-center h-32 md:h-44 relative overflow-hidden">
+                    <img src="${imgSrc}" class="max-h-full max-w-full object-contain mix-blend-multiply group-hover:scale-110 transition duration-500" onerror="this.src='https://placehold.co/300?text=No+Image'">
+                </div>
+                <div class="flex-1 flex flex-col">
+                    <h3 class="font-extrabold text-slate-800 text-xs md:text-sm mb-1 line-clamp-2 leading-snug group-hover:text-blue-700 transition">${displayName}</h3>
+                    <div class="text-[10px] md:text-xs text-slate-500 font-medium mb-1 line-clamp-1">${displayVariant}</div>
+                    <div class="text-[10px] text-slate-400 font-mono mb-2">${p.code}</div>
+                </div>
+                <div class="flex items-end justify-end mt-1 pt-2 border-t border-slate-100">
+                    ${brandBadge}
+                </div>
+            </div>`;
+        }
+        
+        function renderBottomNav() {
+            const bottomNav = document.getElementById('bottomNavContainer');
+            if (currentFilterType === 'search' || currentFilterType === 'all') {
+                bottomNav.classList.add('hidden');
+                return;
+            }
+
+            let prevName = '', nextName = '', prevFunc = '', nextFunc = '';
+            let prevLabel = currentLang === 'km' ? 'ថយក្រោយ' : '上一个';
+            let nextLabel = currentLang === 'km' ? 'បន្ទាប់' : '下一个';
+
+            if (currentFilterType === 'brand') {
+                const idx = globalBrandOrder.indexOf(currentFilterValue);
+                if (idx === -1) return;
+                const prevIdx = (idx - 1 + globalBrandOrder.length) % globalBrandOrder.length;
+                const nextIdx = (idx + 1) % globalBrandOrder.length;
+                prevName = globalBrandOrder[prevIdx];
+                nextName = globalBrandOrder[nextIdx];
+                prevFunc = `showBrand(this.getAttribute('data-action'))" data-action="${prevName.replace(/"/g, '&quot;')}`;
+                nextFunc = `showBrand(this.getAttribute('data-action'))" data-action="${nextName.replace(/"/g, '&quot;')}`;
+            } else if (currentFilterType === 'category') {
+                const idx = globalCatOrder.indexOf(currentFilterValue);
+                if (idx === -1) return;
+                const prevIdx = (idx - 1 + globalCatOrder.length) % globalCatOrder.length;
+                const nextIdx = (idx + 1) % globalCatOrder.length;
+                
+                const prevCat = products.find(p => p.categoryKm === globalCatOrder[prevIdx]);
+                const nextCat = products.find(p => p.categoryKm === globalCatOrder[nextIdx]);
+                
+                prevName = currentLang === 'km' ? prevCat.categoryKm : prevCat.categoryZh;
+                nextName = currentLang === 'km' ? nextCat.categoryKm : nextCat.categoryZh;
+                
+                prevFunc = `showCategory(this.getAttribute('data-action'))" data-action="${globalCatOrder[prevIdx].replace(/"/g, '&quot;')}`;
+                nextFunc = `showCategory(this.getAttribute('data-action'))" data-action="${globalCatOrder[nextIdx].replace(/"/g, '&quot;')}`;
+            }
+
+            bottomNav.innerHTML = `
+                <button onclick="${prevFunc}" class="flex items-center gap-2 px-3 py-2.5 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition shadow-sm font-bold text-slate-700 flex-1 justify-start overflow-hidden">
+                    <svg class="w-5 h-5 shrink-0 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    <div class="text-left min-w-0">
+                        <div class="text-[10px] text-slate-400 font-normal leading-tight">${prevLabel}</div>
+                        <div class="text-xs md:text-sm truncate max-w-[100px] sm:max-w-[200px]">${prevName}</div>
+                    </div>
+                </button>
+                <button onclick="${nextFunc}" class="flex items-center gap-2 px-3 py-2.5 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition shadow-sm font-bold text-slate-700 flex-1 justify-end overflow-hidden">
+                    <div class="text-right min-w-0">
+                        <div class="text-[10px] text-slate-400 font-normal leading-tight">${nextLabel}</div>
+                        <div class="text-xs md:text-sm truncate max-w-[100px] sm:max-w-[200px]">${nextName}</div>
+                    </div>
+                    <svg class="w-5 h-5 shrink-0 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            `;
+            bottomNav.classList.remove('hidden');
+        }
+
+        function openModal(imgSrc, name, code, rawVariant) {
+            const displayVariant = translateVariant(rawVariant);
+            modalImg.src = imgSrc;
+            modalTitle.innerHTML = `<span class='text-amber-600 font-mono mr-2'>[${code}]</span> ${name} ${displayVariant ? `<span class='text-slate-500 text-sm block mt-1'>(${displayVariant})</span>` : ''}`;
+            imageModal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            imageModal.classList.add('hidden');
+            modalImg.src = '';
+        }
+
+        fetchGoogleSheetData();
+    </script>
+</body>
+</html>
