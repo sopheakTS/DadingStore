@@ -33,4 +33,149 @@
             <div class="flex items-center gap-2 md:gap-5 w-full md:w-auto order-2 md:order-3 justify-between md:justify-end shrink-0">
                 <!-- Search & Language Toggle -->
                 <div class="flex items-center gap-2 w-full sm:w-auto shrink-0">
-                    <div class="relative flex-1 sm:w-48 md:w-56 shrink-
+                    <div class="relative flex-1 sm:w-48 md:w-56 shrink-0 min-w-0">
+                        <input type="text" id="searchInput" placeholder="ស្វែងរក..." class="w-full px-4 py-2.5 md:py-2 pl-9 rounded-full bg-[#1b2353] border border-[#2d3770] text-white placeholder-blue-300/60 text-sm focus:outline-none focus:border-amber-400 transition">
+                        <svg class="w-4 h-4 text-blue-300 absolute left-3 top-3 md:top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                    <!-- Language Button -->
+                    <button id="langToggleBtn" onclick="toggleLanguage()" class="w-10 h-10 md:w-9 md:h-9 rounded-full bg-[#1b2353] border border-[#2d3770] flex items-center justify-center text-xl md:text-lg hover:bg-blue-800 transition shrink-0 shadow-sm cursor-pointer select-none">🇰🇭</button>
+                </div>
+            </div>
+
+            <!-- Main Navigation -->
+            <nav class="flex items-center justify-center gap-5 md:gap-8 font-bold text-sm w-full md:w-auto order-3 md:order-2 pt-2 md:pt-0 overflow-x-auto no-scrollbar md:flex-1">
+                <button onclick="showHome()" class="hover:text-amber-400 transition whitespace-nowrap" id="navHome">ទំព័រដើម</button>
+                <button onclick="scrollToSection('brandsSection')" class="hover:text-amber-400 transition whitespace-nowrap" id="navBrands">ម៉ាកយីហោ</button>
+                <button onclick="scrollToSection('categoriesSection')" class="hover:text-amber-400 transition whitespace-nowrap" id="navCategories">ប្រភេទទំនិញ</button>
+                <button onclick="showAbout()" class="hover:text-amber-400 transition whitespace-nowrap" id="navAbout">អំពីយើង</button>
+            </nav>
+            
+        </div>
+    </header>
+
+    <main class="w-full pb-16">
+        
+        <!-- ================= HOME VIEW ================= -->
+        <div id="homeView" class="w-full mt-0 md:mt-6">
+            
+            <!-- Hero Slider -->
+            <div class="w-full md:max-w-7xl md:mx-auto md:px-4">
+                <div class="w-full relative bg-slate-200 aspect-[21/9] md:aspect-[32/9] md:rounded-2xl overflow-hidden md:shadow-lg">
+                    <img id="sliderImg" src="https://i.ibb.co/1jqcdSd/POSTER1.webp" class="w-full h-full object-cover transition-opacity duration-700 ease-in-out">
+                    <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2" id="sliderDots">
+                        <div class="w-2.5 h-2.5 rounded-full bg-white shadow"></div>
+                        <div class="w-2.5 h-2.5 rounded-full bg-white/50 shadow"></div>
+                        <div class="w-2.5 h-2.5 rounded-full bg-white/50 shadow"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4">
+                <!-- Brands Section -->
+                <section id="brandsSection" class="mt-10 md:mt-16 scroll-mt-36 md:scroll-mt-32">
+                    <div class="flex justify-between items-end border-b-2 border-slate-200 pb-3 mb-6">
+                        <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900" id="homeTitleBrand">ម៉ាកយីហោ</h2>
+                    </div>
+                    <div id="homeBrandsGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-5">
+                        <!-- Injected via JS -->
+                    </div>
+                </section>
+
+                <!-- Categories Section -->
+                <section id="categoriesSection" class="mt-12 md:mt-16 mb-10 scroll-mt-36 md:scroll-mt-32">
+                    <div class="flex justify-between items-end border-b-2 border-slate-200 pb-3 mb-6">
+                        <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900" id="homeTitleCat">ប្រភេទទំនិញ</h2>
+                    </div>
+                    <div id="homeCategoriesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-5">
+                        <!-- Injected via JS -->
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- ================= PRODUCT VIEW ================= -->
+        <div id="productView" class="hidden max-w-7xl mx-auto px-4 mt-6 md:mt-10 flex flex-col md:flex-row gap-6 lg:gap-8">
+            
+            <!-- Sidebar -->
+            <aside class="w-full md:w-64 shrink-0">
+                <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm mb-5 text-center">
+                    <div class="w-20 h-20 mx-auto bg-slate-50 rounded-xl flex items-center justify-center mb-3">
+                        <img id="sidebarIcon" src="" class="max-w-full max-h-full object-contain mix-blend-multiply">
+                    </div>
+                    <h2 id="sidebarTitle" class="font-extrabold text-lg text-slate-900 mb-1 leading-tight">Category Name</h2>
+                    <p id="sidebarSubtitle" class="text-xs text-slate-400 font-medium">Subtitle</p>
+                </div>
+            </aside>
+            
+            <!-- Main Content Area -->
+            <div class="flex-1">
+                <div class="mb-6 flex flex-wrap items-end justify-between gap-4 border-b-2 border-slate-200 pb-4">
+                    <div>
+                        <div class="text-[11px] font-bold text-slate-400 mb-1 tracking-wide uppercase">
+                            <span class="cursor-pointer hover:text-blue-600" onclick="showHome()" id="breadcrumbHome">ទំព័រដើម</span> / <span id="breadcrumbCurrent" class="text-blue-900">Category</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <h1 id="pageTitle" class="text-3xl font-black text-slate-900 tracking-tight">Category Name</h1>
+                            <span class="bg-slate-200 text-slate-600 text-xs font-bold px-2.5 py-0.5 rounded-full" id="productCountBadge">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="productGroupContainer">
+                    <!-- Products injected via JS -->
+                </div>
+
+                <!-- Bottom Navigation (Next / Prev) -->
+                <div id="bottomNavContainer" class="mt-8 pt-6 border-t border-slate-200 flex justify-between items-center hidden gap-3">
+                    <!-- Buttons injected via JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= ABOUT VIEW ================= -->
+        <div id="aboutView" class="hidden max-w-5xl mx-auto px-4 mt-6 md:mt-10">
+            <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="h-40 md:h-56 bg-gradient-to-r from-[#0c1439] to-blue-900 flex items-center justify-center relative">
+                    <h2 id="aboutTitleHero" class="text-3xl md:text-5xl font-black text-white z-10 tracking-wider">អំពីយើង</h2>
+                    <div class="absolute inset-0 bg-black/20"></div>
+                </div>
+                
+                <div class="p-6 md:p-12">
+                    <div class="text-center max-w-2xl mx-auto mb-12">
+                        <h3 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-4">DADING STORE</h3>
+                        <p id="aboutDesc" class="text-slate-600 leading-relaxed">
+                            ផ្តល់ជូននូវសម្ភារៈជាង ម៉ូទ័រ និងសម្ភារៈបន្ទប់ទឹកគ្រប់ប្រភេទ មានលក់ដុំ និងលក់រាយ ជាមួយនឹងតម្លៃសមរម្យ និងគុណភាពខ្ពស់។ យើងខ្ញុំប្តេជ្ញាផ្តល់ជូននូវសេវាកម្មដ៏ល្អឥតខ្ចោះដល់អតិថិជនគ្រប់រូប។
+                        </p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <!-- Contact Info -->
+                        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                            <h4 id="aboutContactTitle" class="text-lg font-bold text-slate-900 mb-5 flex items-center gap-2">
+                                <svg class="w-5 h-5 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg>
+                                ទំនាក់ទំនង
+                            </h4>
+                            <div class="space-y-4 text-sm text-slate-600">
+                                <p class="flex items-start gap-3">
+                                    <strong id="aboutPhoneLabel" class="text-slate-800 w-24 shrink-0">លេខទូរស័ព្ទ:</strong> 
+                                    <a href="tel:096 6760998" class="hover:text-blue-600 transition">096 676 0998</a>
+                                </p>
+                                <p class="flex items-start gap-3">
+                                    <strong class="text-slate-800 w-24 shrink-0">Telegram:</strong> 
+                                    <a href="https://t.me/Dading_boss" target="_blank" class="text-blue-600 hover:underline">@Dading_boss</a>
+                                </p>
+                                <p class="flex items-start gap-3">
+                                    <strong id="aboutTimeLabel" class="text-slate-800 w-24 shrink-0">ម៉ោងធ្វើការ:</strong> 
+                                    <span id="aboutTimeVal">ច័ន្ទ - អាទិត្យ (8:00 ព្រឹក - 5:00 ល្ងាច)</span>
+                                </p>
+                                <p class="flex items-start gap-3 pt-2">
+                                    <strong id="aboutAddressLabel" class="text-slate-800 w-24 shrink-0">អាសយដ្ឋាន:</strong> 
+                                    <span id="aboutAddressVal">[សង្កាត់ព្រៃស ខណ្ឌដង្កោរ រាជធានីភ្នំពេញ ]</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Map Placeholder -->
+                        <a href="https://maps.app.goo.gl/YYMbSPxZV8tap7pT9" target="_blank" class="bg-slate-200 hover:bg-slate-300 transition-colors rounded-2xl overflow-hidden min-h-[250px] relative flex items-center justify-center border border-slate-200 group">
+                            <div class="text-center p-4">
+                                <svg class="w-12 h-12 text-blue-500 mx-auto mb-2 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
