@@ -289,7 +289,7 @@
         function translateVariant(variantStr) {
             if (currentLang === 'km' || !variantStr) return variantStr;
             let translated = String(variantStr);
-            const dict = { 'ប្រអប់': '盒', 'កំប៉ុង': '罐', 'កេស': '箱', 'កញ្ចប់': '包', 'បាវ': '袋' };
+            const dict = { 'ប្រអប់': '盒', 'កំប៉ុង': '罐', 'កេស': '箱', 'កញ្ចប់': '包', 'បាវ': '袋', 'ដើម': '根'  };
             for (let key in dict) translated = translated.split(key).join(dict[key]);
             return translated;
         }
