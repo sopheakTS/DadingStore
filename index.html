@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DADING STORE</title>
+    <title>DADING STORE - CATALOG</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -21,7 +21,7 @@
             <!-- Logo & Brand -->
             <div class="flex items-center gap-3 cursor-pointer shrink-0 order-1" onclick="showHome()">
                 <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-inner">
-                    <span class="text-[#0c1439] font-black text-2xl tracking-tighter">DD</span>
+                    <span class="text-[#0c1439] font-black text-2xl tracking-tighter">DS</span>
                 </div>
                 <div class="flex flex-col">
                     <h1 class="text-xl md:text-2xl font-extrabold tracking-tight leading-tight">DADING CAMBODIA</h1>
@@ -29,9 +29,8 @@
                 </div>
             </div>
 
-            <!-- Right Actions (Contact, Search) -->
+            <!-- Right Actions (Search & Language Toggle) -->
             <div class="flex items-center gap-2 md:gap-5 w-full md:w-auto order-2 md:order-3 justify-between md:justify-end shrink-0">
-                <!-- Search & Language Toggle -->
                 <div class="flex items-center gap-2 w-full sm:w-auto shrink-0">
                     <div class="relative flex-1 sm:w-48 md:w-56 shrink-0 min-w-0">
                         <input type="text" id="searchInput" placeholder="ស្វែងរក..." class="w-full px-4 py-2.5 md:py-2 pl-9 rounded-full bg-[#1b2353] border border-[#2d3770] text-white placeholder-blue-300/60 text-sm focus:outline-none focus:border-amber-400 transition">
@@ -54,6 +53,17 @@
     </header>
 
     <main class="w-full pb-16">
+
+        <!-- Inline Error Message Box -->
+        <div id="errorBanner" class="hidden max-w-7xl mx-auto px-4 mt-4">
+            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-2xl flex flex-wrap items-center justify-between gap-3 shadow-sm">
+                <span id="errorBannerText" class="text-sm font-medium"></span>
+                <div class="flex items-center gap-2">
+                    <button onclick="fetchGoogleSheetData()" class="bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-3 py-1.5 rounded-xl transition">ព្យាយាមម្តងទៀត</button>
+                    <button onclick="hideError()" class="text-red-500 hover:text-red-800 font-bold px-2 py-1 rounded-lg">✕</button>
+                </div>
+            </div>
+        </div>
         
         <!-- ================= HOME VIEW ================= -->
         <div id="homeView" class="w-full mt-0 md:mt-6">
@@ -61,7 +71,7 @@
             <!-- Hero Slider -->
             <div class="w-full md:max-w-7xl md:mx-auto md:px-4">
                 <div class="w-full relative bg-slate-200 aspect-[21/9] md:aspect-[32/9] md:rounded-2xl overflow-hidden md:shadow-lg">
-                    <img id="sliderImg" src="https://i.ibb.co/1jqcdSd/POSTER1.webp" class="w-full h-full object-cover transition-opacity duration-700 ease-in-out">
+                    <img id="sliderImg" src="https://i.ibb.co/1jqcdSd/POSTER1.webp" alt="Banner" class="w-full h-full object-cover transition-opacity duration-700 ease-in-out" onerror="this.onerror=null;this.src='https://placehold.co/1200x400/0c1439/ffffff?text=DADING+CAMBODIA'">
                     <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2" id="sliderDots">
                         <div class="w-2.5 h-2.5 rounded-full bg-white shadow"></div>
                         <div class="w-2.5 h-2.5 rounded-full bg-white/50 shadow"></div>
@@ -77,7 +87,10 @@
                         <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900" id="homeTitleBrand">ម៉ាកយីហោ</h2>
                     </div>
                     <div id="homeBrandsGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-5">
-                        <!-- Injected via JS -->
+                        <div class="bg-white rounded-2xl border border-slate-200 h-32 animate-pulse"></div>
+                        <div class="bg-white rounded-2xl border border-slate-200 h-32 animate-pulse"></div>
+                        <div class="bg-white rounded-2xl border border-slate-200 h-32 animate-pulse"></div>
+                        <div class="bg-white rounded-2xl border border-slate-200 h-32 animate-pulse"></div>
                     </div>
                 </section>
 
@@ -87,7 +100,10 @@
                         <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900" id="homeTitleCat">ប្រភេទទំនិញ</h2>
                     </div>
                     <div id="homeCategoriesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-5">
-                        <!-- Injected via JS -->
+                        <div class="bg-white rounded-2xl border border-slate-200 h-36 animate-pulse"></div>
+                        <div class="bg-white rounded-2xl border border-slate-200 h-36 animate-pulse"></div>
+                        <div class="bg-white rounded-2xl border border-slate-200 h-36 animate-pulse"></div>
+                        <div class="bg-white rounded-2xl border border-slate-200 h-36 animate-pulse"></div>
                     </div>
                 </section>
             </div>
@@ -100,7 +116,7 @@
             <aside class="w-full md:w-64 shrink-0">
                 <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm mb-5 text-center">
                     <div class="w-20 h-20 mx-auto bg-slate-50 rounded-xl flex items-center justify-center mb-3">
-                        <img id="sidebarIcon" src="" class="max-w-full max-h-full object-contain mix-blend-multiply">
+                        <img id="sidebarIcon" src="https://placehold.co/100x100/f1f5f9/94a3b8?text=IMG" alt="Category" class="max-w-full max-h-full object-contain mix-blend-multiply" onerror="this.onerror=null;this.src='https://placehold.co/100x100/f1f5f9/94a3b8?text=IMG'">
                     </div>
                     <h2 id="sidebarTitle" class="font-extrabold text-lg text-slate-900 mb-1 leading-tight">Category Name</h2>
                     <p id="sidebarSubtitle" class="text-xs text-slate-400 font-medium">Subtitle</p>
@@ -158,11 +174,11 @@
                             <div class="space-y-4 text-sm text-slate-600">
                                 <p class="flex items-start gap-3">
                                     <strong id="aboutPhoneLabel" class="text-slate-800 w-24 shrink-0">លេខទូរស័ព្ទ:</strong> 
-                                    <a href="tel:096 6760998" class="hover:text-blue-600 transition">096 676 0998</a>
+                                    <a href="tel:0966760998" class="hover:text-blue-600 transition">096 676 0998</a>
                                 </p>
                                 <p class="flex items-start gap-3">
                                     <strong class="text-slate-800 w-24 shrink-0">Telegram:</strong> 
-                                    <a href="https://t.me/Dading_boss" target="_blank" class="text-blue-600 hover:underline">@Dading_boss</a>
+                                    <a href="https://t.me/Dading_boss" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">@Dading_boss</a>
                                 </p>
                                 <p class="flex items-start gap-3">
                                     <strong id="aboutTimeLabel" class="text-slate-800 w-24 shrink-0">ម៉ោងធ្វើការ:</strong> 
@@ -170,13 +186,13 @@
                                 </p>
                                 <p class="flex items-start gap-3 pt-2">
                                     <strong id="aboutAddressLabel" class="text-slate-800 w-24 shrink-0">អាសយដ្ឋាន:</strong> 
-                                    <span id="aboutAddressVal">[សង្កាត់ព្រៃស ខណ្ឌដង្កោរ រាជធានីភ្នំពេញ ]</span>
+                                    <span id="aboutAddressVal">[សង្កាត់ព្រៃស ខណ្ឌដង្កោរ រាជធានីភ្នំពេញ]</span>
                                 </p>
                             </div>
                         </div>
 
-                        <!-- Map Placeholder -->
-                        <a href="https://maps.app.goo.gl/YYMbSPxZV8tap7pT9" target="_blank" class="bg-slate-200 hover:bg-slate-300 transition-colors rounded-2xl overflow-hidden min-h-[250px] relative flex items-center justify-center border border-slate-200 group">
+                        <!-- Map Link -->
+                        <a href="https://maps.app.goo.gl/YYMbSPxZV8tap7pT9" target="_blank" rel="noopener noreferrer" class="bg-slate-200 hover:bg-slate-300 transition-colors rounded-2xl overflow-hidden min-h-[250px] relative flex items-center justify-center border border-slate-200 group">
                             <div class="text-center p-4">
                                 <svg class="w-12 h-12 text-blue-500 mx-auto mb-2 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                                 <span id="aboutMapLabel" class="text-blue-600 font-medium text-sm block">ទីតាំងផែនទី (ចុចដើម្បីមើល)</span>
@@ -189,12 +205,12 @@
 
     </main>
 
-    <!-- Image Lightbox Modal for Zooming -->
+    <!-- Image Lightbox Modal for Zooming & Product Details (No Price) -->
     <div id="imageModal" class="hidden fixed inset-0 z-[100] bg-slate-900/90 backdrop-blur-sm flex justify-center items-center p-4 transition-all" onclick="closeModal()">
         <div class="relative max-w-4xl w-full max-h-[90vh] bg-white rounded-3xl overflow-hidden p-4 shadow-2xl flex flex-col items-center" onclick="event.stopPropagation()">
             <button onclick="closeModal()" class="absolute top-4 right-4 bg-slate-100 hover:bg-slate-200 text-slate-800 w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl transition z-10">✕</button>
-            <div class="w-full overflow-y-auto max-h-[80vh] flex flex-col items-center">
-                <img id="modalImg" src="" class="max-h-[60vh] max-w-full object-contain mx-auto rounded-xl">
+            <div class="w-full overflow-y-auto max-h-[82vh] flex flex-col items-center">
+                <img id="modalImg" src="https://placehold.co/300x300/f8fafc/94a3b8?text=No+Image" alt="Product Preview" class="max-h-[50vh] max-w-full object-contain mx-auto rounded-xl" onerror="this.onerror=null;this.src='https://placehold.co/300x300/f8fafc/94a3b8?text=No+Image'">
                 <div id="modalTitle" class="text-center font-bold text-slate-900 text-base md:text-lg py-4 px-4 mt-2 border-t w-full"></div>
             </div>
         </div>
@@ -204,9 +220,15 @@
     <script>
         const API_URL = 'https://script.google.com/macros/s/AKfycbw-QihTeMYtZM0YqpS8MiEqa9Kqy5gZu1ijRX6zwOeHwVlYB0J3vCPfIw_PIXQNtXK3/exec'; 
         
+        // កំណត់ជួរឈរ (Columns) ពី Google Sheet (មិនប្រើជួរតម្លៃទេ)
         const COL_NAME_KM = 0; const COL_NAME_ZH = 1; const COL_CODE = 2; const COL_VARIANT = 4;
-        const COL_SALE_PRICE = 5; const COL_BRAND = 8;
-        const COL_CATEGORY_KM = 9; const COL_CATEGORY_ZH = 10; const COL_PHOTO = 14;
+        const COL_BRAND = 8;
+        const COL_CATEGORY_KM = 9; const COL_CATEGORY_ZH = 10; 
+        const COL_STOCK = 11;          // ជួរ L
+        const COL_NEW_STOCK = 13;      // ជួរ N
+        const COL_PHOTO = 14;          // ជួរ O
+        const COL_DETAILS_KM = 16;     // ជួរ Q (Product Details_KH)
+        const COL_DETAILS_ZH = 17;     // ជួរ R (Product Details_CN)
 
         let products = [];
         let globalBrandOrder = [];
@@ -224,6 +246,8 @@
         const imageModal = document.getElementById('imageModal');
         const modalImg = document.getElementById('modalImg');
         const modalTitle = document.getElementById('modalTitle');
+        const errorBanner = document.getElementById('errorBanner');
+        const errorBannerText = document.getElementById('errorBannerText');
 
         const posters = [
             'https://i.ibb.co/1jqcdSd/POSTER1.webp', 
@@ -237,6 +261,30 @@
             'DADING': 'https://i.ibb.co/sJ6nYB5s/DADING-LOGO.webp',
             'JC TOP': 'https://i.ibb.co/PvkD2WJ9/JC-top-logo.webp'
         };
+
+        function showError(msg) {
+            if (errorBanner && errorBannerText) {
+                errorBannerText.textContent = msg;
+                errorBanner.classList.remove('hidden');
+            }
+        }
+
+        function hideError() {
+            if (errorBanner) errorBanner.classList.add('hidden');
+        }
+
+        function escapeHtml(str) {
+            return String(str || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function safeUrlEncode(str) {
+            return encodeURIComponent(String(str || '')).replace(/'/g, '%27');
+        }
 
         function translateVariant(variantStr) {
             if (currentLang === 'km' || !variantStr) return variantStr;
@@ -278,20 +326,21 @@
             if (!productView.classList.contains('hidden')) filterData();
         }
 
+        // Auto-rotate hero slider
         let slideIdx = 0;
         setInterval(() => {
             if (posters.length === 0) return;
             slideIdx = (slideIdx + 1) % posters.length;
             const imgEl = document.getElementById('sliderImg');
-            if(imgEl) {
+            if (imgEl) {
                 imgEl.style.opacity = 0;
                 setTimeout(() => {
                     imgEl.src = posters[slideIdx];
                     imgEl.style.opacity = 1;
                     const dots = document.getElementById('sliderDots');
-                    if(dots) {
+                    if (dots) {
                         const dotsChildren = dots.children;
-                        for(let i=0; i<dotsChildren.length; i++){
+                        for (let i = 0; i < dotsChildren.length; i++) {
                             dotsChildren[i].className = i === slideIdx ? 'w-2.5 h-2.5 rounded-full bg-white shadow' : 'w-2.5 h-2.5 rounded-full bg-white/50 shadow';
                         }
                     }
@@ -300,38 +349,91 @@
         }, 4000);
 
         function parseJSONData(rows) {
+            if (!Array.isArray(rows)) return [];
             const result = [];
             for (let i = 1; i < rows.length; i++) {
                 const row = rows[i];
-                if (row.length >= 2 && row[COL_NAME_KM]) {
+                if (Array.isArray(row) && row.length >= 2 && row[COL_NAME_KM]) {
+                    const safeStr = (val) => (val !== null && val !== undefined && val !== '') ? String(val).trim() : '';
+                    
                     result.push({
-                        nameKm: String(row[COL_NAME_KM] || ''), nameZh: String(row[COL_NAME_ZH] || ''),
-                        code: String(row[COL_CODE] || ''), variant: String(row[COL_VARIANT] || ''),
-                        salePrice: String(row[COL_SALE_PRICE] || ''),
-                        brand: String(row[COL_BRAND] || 'Other'), categoryKm: String(row[COL_CATEGORY_KM] || 'Uncategorized'),
-                        categoryZh: String(row[COL_CATEGORY_ZH] || row[COL_CATEGORY_KM] || 'Uncategorized'),
-                        linkphoto: String(row[COL_PHOTO] || '')
+                        _idx: result.length,
+                        nameKm: safeStr(row[COL_NAME_KM]),
+                        nameZh: safeStr(row[COL_NAME_ZH]),
+                        code: safeStr(row[COL_CODE]),
+                        variant: safeStr(row[COL_VARIANT]),
+                        brand: safeStr(row[COL_BRAND]) || 'Other',
+                        categoryKm: safeStr(row[COL_CATEGORY_KM]) || 'Uncategorized',
+                        categoryZh: safeStr(row[COL_CATEGORY_ZH]) || safeStr(row[COL_CATEGORY_KM]) || 'Uncategorized',
+                        stock: safeStr(row[COL_STOCK]),
+                        newStock: safeStr(row[COL_NEW_STOCK]),
+                        linkphoto: safeStr(row[COL_PHOTO]),
+                        detailsKm: safeStr(row[COL_DETAILS_KM]),
+                        detailsZh: safeStr(row[COL_DETAILS_ZH])
                     });
                 }
             }
             return result;
         }
 
+        function handleInitialRoute() {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                if (params.get('q')) {
+                    searchInput.value = params.get('q');
+                    currentFilterType = 'search';
+                    homeView.classList.add('hidden');
+                    aboutView.classList.add('hidden');
+                    productView.classList.remove('hidden');
+                    updateSidebarInfo();
+                    filterData(true);
+                } else if (params.get('new')) {
+                    showNewArrivals(true);
+                } else if (params.get('all')) {
+                    showAllProducts(true);
+                } else if (params.get('category')) {
+                    showCategory(params.get('category'), true);
+                } else if (params.get('brand')) {
+                    showBrand(params.get('brand'), true);
+                } else if (params.get('page') === 'about') {
+                    showAbout(true);
+                }
+            } catch (e) {
+                // Ignore URL parsing errors in restricted iframe environments
+            }
+        }
+
         async function fetchGoogleSheetData() {
             try {
+                hideError();
                 const response = await fetch(API_URL);
-                const rawData = await response.json();
+                if (!response.ok) {
+                    throw new Error('HTTP ' + response.status);
+                }
+                const textData = await response.text();
+                
+                let rawData;
+                try {
+                    rawData = JSON.parse(textData);
+                } catch (parseErr) {
+                    showError('⚠️ ទម្រង់ទិន្នន័យពី API មិនត្រឹមត្រូវទេ សូមពិនិត្យ Google Apps Script ម្តងទៀត។');
+                    buildHomeGrids();
+                    return;
+                }
                 
                 if (rawData && rawData.error) {
-                    alert("⚠️ បញ្ហាពីទិន្នន័យ (API): " + rawData.error);
+                    showError('⚠️ បញ្ហាពីទិន្នន័យ (API): ' + rawData.error);
+                    buildHomeGrids();
                     return;
                 }
                 
                 products = parseJSONData(rawData);
                 buildHomeGrids();
+                handleInitialRoute();
+                
             } catch (error) { 
-                console.error('Error fetching data:', error);
-                alert("⚠️ មិនអាចទាញយកទិន្នន័យបានទេ! សូមឆែកអ៊ីនធឺណិត ឬ API Link។\n" + error.message);
+                showError('⚠️ មិនអាចទាញយកទិន្នន័យបានទេ! សូមពិនិត្យការភ្ជាប់អ៊ីនធឺណិត ឬ API Link។');
+                buildHomeGrids();
             }
         }
 
@@ -350,56 +452,133 @@
             globalBrandOrder = brandOrder;
             globalCatOrder = catOrder;
 
-            document.getElementById('homeBrandsGrid').innerHTML = brandOrder.map(b => {
-                const safeB = String(b).trim();
-                const brandKey = safeB.toUpperCase();
-                const brandLogo = brandLogos[brandKey] || `https://placehold.co/200x100/ffffff/0c1439?text=${encodeURIComponent(safeB)}`;
-                return `<div onclick="showBrand(this.getAttribute('data-brand'))" data-brand="${safeB.replace(/"/g, '&quot;')}" class="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col items-center justify-center cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all group h-32">
-                    <img src="${brandLogo}" class="h-16 w-full object-contain mb-2 mix-blend-multiply group-hover:scale-105 transition" onerror="this.src='https://placehold.co/200x100?text=${encodeURIComponent(safeB)}'">
-                    <span class="font-bold text-xs text-slate-500 mt-1">${safeB}</span>
+            document.getElementById('homeBrandsGrid').innerHTML = brandOrder.length > 0
+                ? brandOrder.map(b => {
+                    const safeB = String(b).trim();
+                    const brandKey = safeB.toUpperCase();
+                    const encodedB = safeUrlEncode(safeB);
+                    const brandLogo = brandLogos[brandKey] || `https://placehold.co/200x100/ffffff/0c1439?text=${encodedB}`;
+                    return `<div onclick="showBrand(this.dataset.brand)" data-brand="${escapeHtml(safeB)}" class="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col items-center justify-center cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all group h-32">
+                        <img src="${escapeHtml(brandLogo)}" alt="${escapeHtml(safeB)}" class="h-16 w-full object-contain mb-2 mix-blend-multiply group-hover:scale-105 transition" onerror="this.onerror=null;this.src='https://placehold.co/200x100/ffffff/0c1439?text=${encodedB}'">
+                        <span class="font-bold text-xs text-slate-500 mt-1">${escapeHtml(safeB)}</span>
+                    </div>`;
+                }).join('')
+                : `<div class="col-span-full text-center text-slate-400 text-sm py-6">${currentLang === 'km' ? 'មិនទាន់មានទិន្នន័យម៉ាកយីហោ' : '暂无品牌数据'}</div>`;
+
+            // ប្រអប់ពិសេសចំនួន ២ (ទំនិញថ្មី និង ទំនិញទាំងអស់)
+            const newArrivalsCard = `<div onclick="showNewArrivals()" class="bg-gradient-to-br from-red-50 to-white rounded-2xl border-2 border-red-200 p-4 flex flex-col items-center justify-center cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all group">
+                <div class="h-16 md:h-20 w-16 md:w-20 rounded-2xl bg-red-600 text-white flex flex-col items-center justify-center mb-3 shadow-md group-hover:scale-110 transition">
+                    <svg class="w-8 h-8 md:w-9 md:h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+                    <span class="text-[9px] font-black tracking-wider mt-0.5">NEW</span>
+                </div>
+                <span class="font-extrabold text-sm text-red-600 text-center line-clamp-1">${currentLang === 'km' ? 'ទំនិញថ្មី' : '新货'}</span>
+            </div>`;
+
+            const allProductsCard = `<div onclick="showAllProducts()" class="bg-gradient-to-br from-blue-50 to-white rounded-2xl border-2 border-blue-200 p-4 flex flex-col items-center justify-center cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all group">
+                <div class="h-16 md:h-20 w-16 md:w-20 rounded-2xl bg-[#0c1439] text-white flex flex-col items-center justify-center mb-3 shadow-md group-hover:scale-110 transition">
+                    <svg class="w-8 h-8 md:w-9 md:h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                    <span class="text-[9px] font-black tracking-wider mt-0.5">ALL</span>
+                </div>
+                <span class="font-extrabold text-sm text-[#0c1439] text-center line-clamp-1">${currentLang === 'km' ? 'ទំនិញទាំងអស់' : '全部商品'}</span>
+            </div>`;
+
+            const categoryCards = catOrder.map(catKey => {
+                const c = catMap[catKey];
+                const img = c.img || 'https://placehold.co/200x200/f8fafc/94a3b8?text=Category';
+                const displayName = currentLang === 'km' ? c.kmName : c.zhName;
+                return `<div onclick="showCategory(this.dataset.cat)" data-cat="${escapeHtml(c.kmName)}" class="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col items-center justify-center cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all group">
+                    <img src="${escapeHtml(img)}" alt="${escapeHtml(displayName)}" class="h-16 md:h-20 w-16 md:w-20 object-contain mb-3 mix-blend-multiply group-hover:scale-110 transition" onerror="this.onerror=null;this.src='https://placehold.co/200x200/f8fafc/94a3b8?text=IMG'">
+                    <span class="font-extrabold text-sm text-slate-800 text-center line-clamp-1">${escapeHtml(displayName)}</span>
                 </div>`;
             }).join('');
 
-            document.getElementById('homeCategoriesGrid').innerHTML = catOrder.map(catKey => {
-                const c = catMap[catKey];
-                const img = c.img || 'https://placehold.co/200?text=Category';
-                const displayName = currentLang === 'km' ? c.kmName : c.zhName;
-                return `<div onclick="showCategory(this.getAttribute('data-cat'))" data-cat="${c.kmName.replace(/"/g, '&quot;')}" class="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col items-center justify-center cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all group">
-                    <img src="${img}" class="h-16 md:h-20 w-16 md:w-20 object-contain mb-3 mix-blend-multiply group-hover:scale-110 transition" onerror="this.src='https://placehold.co/200?text=IMG'">
-                    <span class="font-extrabold text-sm text-slate-800 text-center line-clamp-1">${displayName}</span>
-                </div>`;
-            }).join('');
+            document.getElementById('homeCategoriesGrid').innerHTML = newArrivalsCard + allProductsCard + categoryCards;
         }
 
-        function showHome() {
+        function showHome(skipHistory = false) {
             currentFilterType = 'all'; currentFilterValue = ''; searchInput.value = '';
             homeView.classList.remove('hidden'); productView.classList.add('hidden'); aboutView.classList.add('hidden');
             window.scrollTo({top: 0, behavior: 'smooth'});
+            if (!skipHistory) {
+                try { window.history.pushState({page: 'home'}, '', window.location.pathname); } catch (e) {}
+            }
         }
         
-        function showAbout() {
+        function showAbout(skipHistory = false) {
             homeView.classList.add('hidden'); productView.classList.add('hidden'); aboutView.classList.remove('hidden');
             window.scrollTo({top: 0, behavior: 'smooth'});
+            if (!skipHistory) {
+                try { window.history.pushState({page: 'about'}, '', '?page=about'); } catch (e) {}
+            }
         }
 
         function scrollToSection(id) {
-            showHome(); setTimeout(() => document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+            showHome();
+            setTimeout(() => {
+                const el = document.getElementById(id);
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
         }
 
-        function showCategory(catKmName) {
+        function showCategory(catKmName, skipHistory = false) {
             currentFilterType = 'category'; currentFilterValue = String(catKmName); searchInput.value = '';
             homeView.classList.add('hidden'); aboutView.classList.add('hidden'); productView.classList.remove('hidden');
-            window.scrollTo({top: 0}); updateSidebarInfo(); filterData();
+            window.scrollTo({top: 0}); updateSidebarInfo(); filterData(skipHistory);
+            if (!skipHistory) {
+                try { window.history.pushState({type: 'category', val: catKmName}, '', '?category=' + encodeURIComponent(catKmName)); } catch (e) {}
+            }
         }
 
-        function showBrand(brandName) {
+        function showNewArrivals(skipHistory = false) {
+            currentFilterType = 'new_arrivals'; currentFilterValue = ''; searchInput.value = '';
+            homeView.classList.add('hidden'); aboutView.classList.add('hidden'); productView.classList.remove('hidden');
+            window.scrollTo({top: 0}); updateSidebarInfo(); filterData(skipHistory);
+            if (!skipHistory) {
+                try { window.history.pushState({type: 'new'}, '', '?new=1'); } catch (e) {}
+            }
+        }
+
+        function showAllProducts(skipHistory = false) {
+            currentFilterType = 'all_products'; currentFilterValue = ''; searchInput.value = '';
+            homeView.classList.add('hidden'); aboutView.classList.add('hidden'); productView.classList.remove('hidden');
+            window.scrollTo({top: 0}); updateSidebarInfo(); filterData(skipHistory);
+            if (!skipHistory) {
+                try { window.history.pushState({type: 'all_products'}, '', '?all=1'); } catch (e) {}
+            }
+        }
+
+        function showBrand(brandName, skipHistory = false) {
             currentFilterType = 'brand'; currentFilterValue = String(brandName); searchInput.value = '';
             homeView.classList.add('hidden'); aboutView.classList.add('hidden'); productView.classList.remove('hidden');
-            window.scrollTo({top: 0}); updateSidebarInfo(); filterData();
+            window.scrollTo({top: 0}); updateSidebarInfo(); filterData(skipHistory);
+            if (!skipHistory) {
+                try { window.history.pushState({type: 'brand', val: brandName}, '', '?brand=' + encodeURIComponent(brandName)); } catch (e) {}
+            }
         }
 
+        window.addEventListener('popstate', () => {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                if (params.get('q')) {
+                    searchInput.value = params.get('q');
+                    currentFilterType = 'search';
+                    homeView.classList.add('hidden'); aboutView.classList.add('hidden'); productView.classList.remove('hidden');
+                    updateSidebarInfo();
+                    filterData(true);
+                }
+                else if (params.get('new')) showNewArrivals(true);
+                else if (params.get('all')) showAllProducts(true);
+                else if (params.get('category')) showCategory(params.get('category'), true);
+                else if (params.get('brand')) showBrand(params.get('brand'), true);
+                else if (params.get('page') === 'about') showAbout(true);
+                else showHome(true);
+            } catch (e) {
+                showHome(true);
+            }
+        });
+
         function updateSidebarInfo() {
-            let title = '', subtitle = '', iconSrc = 'https://placehold.co/100?text=IMG';
+            let title = '', subtitle = '', iconSrc = 'https://placehold.co/100x100/f1f5f9/94a3b8?text=IMG';
             if (currentFilterType === 'category') {
                 const sample = products.find(p => p.categoryKm === currentFilterValue);
                 title = sample ? (currentLang === 'km' ? sample.categoryKm : sample.categoryZh) : currentFilterValue;
@@ -408,9 +587,22 @@
             } else if (currentFilterType === 'brand') {
                 title = currentFilterValue; subtitle = currentLang === 'km' ? 'ម៉ាកយីហោ' : '品牌';
                 const safeBrand = String(currentFilterValue).trim().toUpperCase();
-                iconSrc = brandLogos[safeBrand] || `https://placehold.co/200x100/ffffff/0c1439?text=${encodeURIComponent(currentFilterValue)}`;
+                iconSrc = brandLogos[safeBrand] || `https://placehold.co/200x100/ffffff/0c1439?text=${safeUrlEncode(currentFilterValue)}`;
+            } else if (currentFilterType === 'new_arrivals') {
+                title = currentLang === 'km' ? 'ទំនិញថ្មី' : '新货'; subtitle = currentLang === 'km' ? 'ទំនិញចូលស្តុកថ្មី' : '最新到货';
+                iconSrc = 'https://placehold.co/150x150/fef2f2/dc2626?text=NEW';
+            } else if (currentFilterType === 'all_products') {
+                title = currentLang === 'km' ? 'ទំនិញទាំងអស់' : '全部商品'; subtitle = currentLang === 'km' ? 'បង្ហាញតាមលំដាប់តារាង' : '按列表顺序显示';
+                iconSrc = 'https://placehold.co/150x150/eff6ff/0c1439?text=ALL';
             } else if (currentFilterType === 'search') {
                 title = currentLang === 'km' ? 'លទ្ធផលស្វែងរក' : '搜索结果'; subtitle = searchInput.value;
+                const q = searchInput.value.toLowerCase().trim();
+                const matchedProduct = products.find(p => p.nameZh.toLowerCase().includes(q) || p.nameKm.toLowerCase().includes(q) || p.code.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q));
+                if (matchedProduct && matchedProduct.linkphoto) {
+                    iconSrc = matchedProduct.linkphoto;
+                } else {
+                    iconSrc = 'https://placehold.co/150x150/f1f5f9/94a3b8?text=Search';
+                }
             }
             document.getElementById('sidebarTitle').innerText = title;
             document.getElementById('sidebarSubtitle').innerText = subtitle;
@@ -419,7 +611,7 @@
             document.getElementById('sidebarIcon').src = iconSrc;
         }
 
-        function filterData() {
+        function filterData(skipHistory = false) {
             const query = searchInput.value.toLowerCase().trim();
             let filtered = products;
 
@@ -430,9 +622,14 @@
 
             if (currentFilterType === 'category') filtered = filtered.filter(p => p.categoryKm === currentFilterValue);
             else if (currentFilterType === 'brand') filtered = filtered.filter(p => p.brand === currentFilterValue);
+            else if (currentFilterType === 'new_arrivals') filtered = filtered.filter(p => p.newStock === '1');
 
             if (query !== '') {
                 filtered = filtered.filter(p => p.nameZh.toLowerCase().includes(query) || p.nameKm.toLowerCase().includes(query) || p.code.toLowerCase().includes(query) || p.brand.toLowerCase().includes(query));
+                if (currentFilterType === 'search') updateSidebarInfo();
+                if (!skipHistory && currentFilterType === 'search') {
+                    try { window.history.replaceState({type: 'search', val: query}, '', '?q=' + encodeURIComponent(query)); } catch (e) {}
+                }
             }
 
             document.getElementById('productCountBadge').innerText = filtered.length;
@@ -441,7 +638,7 @@
         }
 
         searchInput.addEventListener('input', () => {
-            if(searchInput.value.trim() === '' && currentFilterType === 'search') showHome();
+            if (searchInput.value.trim() === '' && currentFilterType === 'search') showHome();
             else filterData();
         });
 
@@ -462,7 +659,7 @@
             groupOrder.forEach(key => {
                 const groupHtml = `<div class="mb-10">
                     <div class="flex items-center gap-3 mb-4">
-                        <h2 class="text-xl md:text-2xl font-extrabold text-slate-900">${key}</h2>
+                        <h2 class="text-xl md:text-2xl font-extrabold text-slate-900">${escapeHtml(key)}</h2>
                         <span class="bg-slate-100 border border-slate-200 text-slate-500 text-xs font-bold px-2 py-0.5 rounded-full shadow-sm">${grouped[key].length}</span>
                     </div>
                     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
@@ -474,24 +671,40 @@
         }
 
         function generateProductCardHTML(p) {
-            const imgSrc = p.linkphoto || 'https://placehold.co/300?text=No+Image';
+            const imgSrc = p.linkphoto || 'https://placehold.co/300x300/f8fafc/94a3b8?text=No+Image';
             const displayName = currentLang === 'km' ? p.nameKm : p.nameZh;
             const displayVariant = translateVariant(p.variant) || (currentLang === 'km' ? 'ស្តង់ដារ' : '标准');
-            const safeName = displayName.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-            const safeVariantRaw = (p.variant || '').replace(/'/g, "\\'");
-            const brandBadge = p.brand ? `<div class="w-8 h-8 rounded bg-blue-900 text-white flex items-center justify-center text-[9px] font-bold shadow">${p.brand.substring(0,4).toUpperCase()}</div>` : '';
+            const brandBadge = p.brand ? `<div class="w-8 h-8 rounded bg-blue-900 text-white flex items-center justify-center text-[9px] font-bold shadow shrink-0">${escapeHtml(p.brand.substring(0, 4).toUpperCase())}</div>` : '';
 
-            // លុបផ្នែកតម្លៃចេញទាំងស្រុង ទុកតែ Logo ម៉ាកយីហោនៅខាងស្តាំ
-            return `<div class="bg-white rounded-2xl border border-slate-200 p-3 hover:shadow-xl hover:border-amber-300 transition-all flex flex-col justify-between cursor-pointer group" onclick="openModal('${imgSrc}', '${safeName}', '${p.code}', '${safeVariantRaw}')">
+            const isOutOfStock = p.stock === '0';
+            const isNewStock = p.newStock === '1';
+
+            const cardClass = isOutOfStock ? 'grayscale opacity-60' : 'hover:shadow-xl hover:border-amber-300';
+            const imageHoverClass = isOutOfStock ? '' : 'group-hover:scale-110';
+            const textHoverClass = isOutOfStock ? '' : 'group-hover:text-blue-700';
+
+            // បង្ហាញតែស្លាក "ទំនិញថ្មី" និង "អស់ស្តុក" (មិនបង្ហាញ "តម្លៃថ្មី" ព្រោះគ្មានតម្លៃ)
+            let labelsHtml = '<div class="absolute top-2 left-2 flex flex-col gap-1.5 z-10 items-start">';
+            if (isNewStock) {
+                labelsHtml += `<span class="bg-red-600 text-white px-2 py-0.5 rounded-full text-[9px] md:text-[10px] font-bold shadow-sm tracking-wide">${currentLang === 'km' ? 'ទំនិញថ្មី' : '新货'}</span>`;
+            }
+            if (isOutOfStock) {
+                labelsHtml += `<span class="bg-slate-600 text-white px-2 py-0.5 rounded-full text-[9px] md:text-[10px] font-bold shadow-sm tracking-wide">${currentLang === 'km' ? 'អស់ស្តុក' : '没货'}</span>`;
+            }
+            labelsHtml += '</div>';
+
+            // លុបតម្លៃចេញទាំងស្រុង ទុកលេខកូដនៅខាងឆ្វេង និងឡូហ្គោម៉ាកនៅខាងស្តាំ
+            return `<div class="bg-white rounded-2xl border border-slate-200 p-3 transition-all flex flex-col justify-between cursor-pointer group ${cardClass}" onclick="openModal(${p._idx})">
                 <div class="mb-3 bg-[#f8fafc] rounded-xl p-2 flex items-center justify-center h-32 md:h-44 relative overflow-hidden">
-                    <img src="${imgSrc}" class="max-h-full max-w-full object-contain mix-blend-multiply group-hover:scale-110 transition duration-500" onerror="this.src='https://placehold.co/300?text=No+Image'">
+                    ${labelsHtml}
+                    <img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(displayName)}" class="max-h-full max-w-full object-contain mix-blend-multiply transition duration-500 ${imageHoverClass}" onerror="this.onerror=null;this.src='https://placehold.co/300x300/f8fafc/94a3b8?text=No+Image'">
                 </div>
                 <div class="flex-1 flex flex-col">
-                    <h3 class="font-extrabold text-slate-800 text-xs md:text-sm mb-1 line-clamp-2 leading-snug group-hover:text-blue-700 transition">${displayName}</h3>
-                    <div class="text-[10px] md:text-xs text-slate-500 font-medium mb-1 line-clamp-1">${displayVariant}</div>
-                    <div class="text-[10px] text-slate-400 font-mono mb-2">${p.code}</div>
+                    <h3 class="font-extrabold text-slate-800 text-xs md:text-sm mb-1 line-clamp-2 leading-snug transition ${textHoverClass}">${escapeHtml(displayName)}</h3>
+                    <div class="text-[10px] md:text-xs text-slate-500 font-medium mb-2 line-clamp-1">${escapeHtml(displayVariant)}</div>
                 </div>
-                <div class="flex items-end justify-end mt-1 pt-2 border-t border-slate-100">
+                <div class="flex items-center justify-between mt-1 pt-2 border-t border-slate-100">
+                    <span class="text-[11px] text-slate-500 font-mono font-semibold">${escapeHtml(p.code)}</span>
                     ${brandBadge}
                 </div>
             </div>`;
@@ -499,52 +712,53 @@
         
         function renderBottomNav() {
             const bottomNav = document.getElementById('bottomNavContainer');
-            if (currentFilterType === 'search' || currentFilterType === 'all') {
+            if (currentFilterType === 'search' || currentFilterType === 'all' || currentFilterType === 'new_arrivals' || currentFilterType === 'all_products') {
                 bottomNav.classList.add('hidden');
                 return;
             }
 
-            let prevName = '', nextName = '', prevFunc = '', nextFunc = '';
+            let prevName = '', nextName = '', prevAttr = '', nextAttr = '', clickHandler = '';
             let prevLabel = currentLang === 'km' ? 'ថយក្រោយ' : '上一个';
             let nextLabel = currentLang === 'km' ? 'បន្ទាប់' : '下一个';
 
             if (currentFilterType === 'brand') {
                 const idx = globalBrandOrder.indexOf(currentFilterValue);
-                if (idx === -1) return;
+                if (idx === -1 || globalBrandOrder.length === 0) return;
                 const prevIdx = (idx - 1 + globalBrandOrder.length) % globalBrandOrder.length;
                 const nextIdx = (idx + 1) % globalBrandOrder.length;
                 prevName = globalBrandOrder[prevIdx];
                 nextName = globalBrandOrder[nextIdx];
-                prevFunc = `showBrand(this.getAttribute('data-action'))" data-action="${prevName.replace(/"/g, '&quot;')}`;
-                nextFunc = `showBrand(this.getAttribute('data-action'))" data-action="${nextName.replace(/"/g, '&quot;')}`;
+                prevAttr = prevName;
+                nextAttr = nextName;
+                clickHandler = 'showBrand(this.dataset.target)';
             } else if (currentFilterType === 'category') {
                 const idx = globalCatOrder.indexOf(currentFilterValue);
-                if (idx === -1) return;
+                if (idx === -1 || globalCatOrder.length === 0) return;
                 const prevIdx = (idx - 1 + globalCatOrder.length) % globalCatOrder.length;
                 const nextIdx = (idx + 1) % globalCatOrder.length;
                 
                 const prevCat = products.find(p => p.categoryKm === globalCatOrder[prevIdx]);
                 const nextCat = products.find(p => p.categoryKm === globalCatOrder[nextIdx]);
                 
-                prevName = currentLang === 'km' ? prevCat.categoryKm : prevCat.categoryZh;
-                nextName = currentLang === 'km' ? nextCat.categoryKm : nextCat.categoryZh;
-                
-                prevFunc = `showCategory(this.getAttribute('data-action'))" data-action="${globalCatOrder[prevIdx].replace(/"/g, '&quot;')}`;
-                nextFunc = `showCategory(this.getAttribute('data-action'))" data-action="${globalCatOrder[nextIdx].replace(/"/g, '&quot;')}`;
+                prevName = prevCat ? (currentLang === 'km' ? prevCat.categoryKm : prevCat.categoryZh) : globalCatOrder[prevIdx];
+                nextName = nextCat ? (currentLang === 'km' ? nextCat.categoryKm : nextCat.categoryZh) : globalCatOrder[nextIdx];
+                prevAttr = globalCatOrder[prevIdx];
+                nextAttr = globalCatOrder[nextIdx];
+                clickHandler = 'showCategory(this.dataset.target)';
             }
 
             bottomNav.innerHTML = `
-                <button onclick="${prevFunc}" class="flex items-center gap-2 px-3 py-2.5 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition shadow-sm font-bold text-slate-700 flex-1 justify-start overflow-hidden">
+                <button onclick="${clickHandler}" data-target="${escapeHtml(prevAttr)}" class="flex items-center gap-2 px-3 py-2.5 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition shadow-sm font-bold text-slate-700 flex-1 justify-start overflow-hidden">
                     <svg class="w-5 h-5 shrink-0 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                     <div class="text-left min-w-0">
                         <div class="text-[10px] text-slate-400 font-normal leading-tight">${prevLabel}</div>
-                        <div class="text-xs md:text-sm truncate max-w-[100px] sm:max-w-[200px]">${prevName}</div>
+                        <div class="text-xs md:text-sm truncate max-w-[100px] sm:max-w-[200px]">${escapeHtml(prevName)}</div>
                     </div>
                 </button>
-                <button onclick="${nextFunc}" class="flex items-center gap-2 px-3 py-2.5 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition shadow-sm font-bold text-slate-700 flex-1 justify-end overflow-hidden">
+                <button onclick="${clickHandler}" data-target="${escapeHtml(nextAttr)}" class="flex items-center gap-2 px-3 py-2.5 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition shadow-sm font-bold text-slate-700 flex-1 justify-end overflow-hidden">
                     <div class="text-right min-w-0">
                         <div class="text-[10px] text-slate-400 font-normal leading-tight">${nextLabel}</div>
-                        <div class="text-xs md:text-sm truncate max-w-[100px] sm:max-w-[200px]">${nextName}</div>
+                        <div class="text-xs md:text-sm truncate max-w-[100px] sm:max-w-[200px]">${escapeHtml(nextName)}</div>
                     </div>
                     <svg class="w-5 h-5 shrink-0 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </button>
@@ -552,17 +766,46 @@
             bottomNav.classList.remove('hidden');
         }
 
-        function openModal(imgSrc, name, code, rawVariant) {
-            const displayVariant = translateVariant(rawVariant);
+        function openModal(productIdx) {
+            const p = products[productIdx];
+            if (!p) return;
+
+            const imgSrc = p.linkphoto || 'https://placehold.co/300x300/f8fafc/94a3b8?text=No+Image';
+            const displayName = currentLang === 'km' ? p.nameKm : p.nameZh;
+            const displayVariant = translateVariant(p.variant);
+            const rawDetails = currentLang === 'km' ? (p.detailsKm || p.detailsZh) : (p.detailsZh || p.detailsKm);
+            const detailsLabel = currentLang === 'km' ? 'ព័ត៌មានលម្អិត' : '产品详情';
+
+            // បង្ហាញតែប្រអប់ព័ត៌មានលម្អិត (Product Details) នៅកណ្តាល ដោយគ្មានតម្លៃ
+            const detailsHtml = rawDetails
+                ? `<div class='mt-3 max-w-xl mx-auto bg-slate-50 border border-slate-200 rounded-2xl p-3 sm:p-4 text-left'>
+                        <div class='text-xs font-extrabold text-slate-700 mb-1.5 flex items-center gap-1.5'>
+                            <svg class='w-4 h-4 text-blue-600 shrink-0' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'></path></svg>
+                            <span>${detailsLabel}</span>
+                        </div>
+                        <div class='text-xs sm:text-sm text-slate-600 font-normal leading-relaxed whitespace-pre-line break-words'>${escapeHtml(rawDetails)}</div>
+                   </div>`
+                : '';
+
             modalImg.src = imgSrc;
-            modalTitle.innerHTML = `<span class='text-amber-600 font-mono mr-2'>[${code}]</span> ${name} ${displayVariant ? `<span class='text-slate-500 text-sm block mt-1'>(${displayVariant})</span>` : ''}`;
+            modalTitle.innerHTML = `
+                <div class='text-sm sm:text-base md:text-lg'><span class='text-amber-600 font-mono mr-1.5'>[${escapeHtml(p.code)}]</span> ${escapeHtml(displayName)}</div>
+                ${displayVariant ? `<span class='text-slate-500 text-xs sm:text-sm block mt-0.5'>(${escapeHtml(displayVariant)})</span>` : ''}
+                ${detailsHtml}
+            `;
             imageModal.classList.remove('hidden');
         }
 
         function closeModal() {
             imageModal.classList.add('hidden');
-            modalImg.src = '';
+            modalImg.removeAttribute('src');
         }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !imageModal.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
 
         fetchGoogleSheetData();
     </script>
